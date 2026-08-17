@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="th">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ใบงานที่ 1 - Product และ Encapsulation (OOP PHP 8.4+)</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+
+    <style>
+        :root {
+            color-scheme: light;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans Thai", sans-serif;
+            line-height: 1.75;
+            background: #eef2f7;
+            color: #0f172a;
+        }
+
+        .sheet {
+            width: min(900px, calc(100% - 2rem));
+            margin: 1.5rem auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+            padding: 2rem 2.25rem;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin: 0 0 0.25rem;
+        }
+
+        h2 {
+            font-size: 1.15rem;
+            margin: 1.75rem 0 0.5rem;
+            padding: 0.4rem 0.75rem;
+            background: #eef2ff;
+            border-left: 5px solid #4f46e5;
+            border-radius: 6px;
+        }
+
+        .meta {
+            display: grid;
+            grid-template-columns: 2fr 1.2fr 1fr 0.8fr;
+            gap: 0.75rem;
+            margin: 1rem 0;
+            font-size: 0.95rem;
+        }
+
+        .meta div {
+            border-bottom: 1px solid #94a3b8;
+            padding-bottom: 0.2rem;
+        }
+
+        .objectives li {
+            margin: 0.2rem 0;
+        }
+
+        pre.mermaid {
+            margin: 1rem 0;
+            padding: 1rem;
+            border-radius: 12px;
+            background: #f8fafc;
+            border: 1px dashed rgba(15, 23, 42, 0.2);
+            overflow: auto;
+        }
+
+        pre.code {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            overflow: auto;
+            font-size: 0.88rem;
+            line-height: 1.6;
+        }
+
+        .q {
+            margin: 0.9rem 0;
+        }
+
+        .q p {
+            margin: 0 0 0.35rem;
+        }
+
+        .pts {
+            display: inline-block;
+            background: #f1f5f9;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 0.1rem 0.55rem;
+            margin-left: 0.4rem;
+        }
+
+        .line {
+            height: 2em;
+            border-bottom: 1px solid #94a3b8;
+            margin-bottom: 0.15rem;
+            color: red;
+        }
+
+        .line.short {
+            width: 45%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+            margin: 0.75rem 0;
+        }
+
+        th, td {
+            border: 1px solid #94a3b8;
+            padding: 0.5rem 0.6rem;
+            vertical-align: top;
+            text-align: left;
+        }
+
+        th {
+            background: #f1f5f9;
+        }
+
+        td.fill {
+            height: 3.2em;
+        }
+
+        .badge-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            margin: 0.75rem 0;
+        }
+
+        .badge {
+            background: #f1f5f9;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 0.28rem 0.65rem;
+        }
+
+        .note {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border-radius: 10px;
+            padding: 0.7rem 0.9rem;
+            font-size: 0.93rem;
+            margin: 0.75rem 0;
+        }
+
+        .teacher {
+            border-top: 3px dashed #0f172a;
+            margin-top: 2rem;
+            padding-top: 1rem;
+        }
+
+        .answer-key {
+            background: #f0fdf4;
+            border: 1px solid #86efac;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-size: 0.93rem;
+            margin: 0.6rem 0;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .sheet {
+                width: 100%;
+                margin: 0;
+                box-shadow: none;
+                border-radius: 0;
+                padding: 0;
+            }
+
+            .teacher {
+                page-break-before: always;
+            }
+
+            pre.mermaid, pre.code {
+                break-inside: avoid;
+            }
+        }
+
+        @page {
+            size: A4;
+            margin: 14mm;
+        }
+
+        .fill{
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+<div class="sheet">
+
+    <h1>ใบงานปฏิบัติการที่ 1</h1>
+    <p style="margin:0;">
+        เรื่อง การห่อหุ้มข้อมูลและการรักษา Invariant ด้วยคลาส Product
+        (บริบท: สินค้าสหกรณ์นักศึกษา)<br />
+        รายวิชา การเขียนโปรแกรมเชิงวัตถุ (PHP 8.4+)
+    </p>
+
+    <div class="meta">
+        <div>ชื่อ-นามสกุล: น.ส.ปภัสสร แย้มชื่น</div>
+        <div>รหัสนักศึกษา: 674230034</div>
+        <div>ชั้นปี/ห้อง: 67/44</div>
+        <div>คะแนน: /50</div>
+    </div>
+
+    <p><strong>คำชี้แจง:</strong> ให้นักศึกษาศึกษา Class Diagram ด้านล่าง แล้วทำกิจกรรมทุกส่วนให้ครบถ้วน</p>
+
+    <h2>แผนภาพอ้างอิง</h2>
+
+    <div class="badge-row">
+        <span class="badge">Encapsulation</span>
+        <span class="badge">Information Hiding</span>
+        <span class="badge">SRP</span>
+        <span class="badge">Invariant</span>
+        <span class="badge">Information Expert</span>
+    </div>
+
+    <pre class="mermaid">
+classDiagram
+    class Product {
+        &lt;&lt;Encapsulation&gt;&gt;
+        +int id
+        +string name
+        +float price
+        +__construct(id, name, price)
+        +applyDiscount(percent) void
+        +displayPrice() string
+        -validatePrice(price) float
+    }
+
+    class InvalidArgumentException {
+        &lt;&lt;exception&gt;&gt;
+    }
+
+    Product --> InvalidArgumentException : Invariant Guard
+    </pre>
+
+    <div class="note">
+        Product เป็น Information Expert เพราะมีข้อมูล price และ percent
+        จึงควรเป็นผู้รับผิดชอบการตรวจสอบและคำนวณราคาหลังลดเอง
+    </div>
+
+    <h2>ส่วนที่ 1: อ่านแผนภาพแล้วตอบคำถาม (10 คะแนน)</h2>
+
+    <div class="q">
+        <p>1) Stereotype «Encapsulation» ที่กำกับคลาส Product สื่อความหมายว่าอย่างไร <span class="pts">2 คะแนน</span></p>
+        <div class="line">ตรวจสอบราคาสินค้าว่าถูกต้องหรือไม่</div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>2) สัญลักษณ์ <strong>+</strong> และ <strong>-</strong> หน้าสมาชิกของคลาส หมายถึงอะไร <span class="pts">2 คะแนน</span></p>
+        <div class="line">สัญลักษณ์ + หมายถึง Public และ สัญลักษณ์ - หมายถึง Private </div>
+    </div>
+
+    <div class="q">
+        <p>3) property <code>price</code> อ่านได้จากภายนอกแต่แก้ไขโดยตรงไม่ได้ ใน PHP 8.4 ใช้กลไกใด และเหตุใดจึงออกแบบเช่นนั้น <span class="pts">2 คะแนน</span></p>
+        <div class="line">ใช้กลไก Property Hooks (เฉพาะ get hook ไม่มี set) หรือการใช้ Asymmetric Visibility ด้วยสัญลักษณ์ public private(set)</div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>4) จงระบุ Invariant ของคลาส Product มา 2 ข้อ <span class="pts">2 คะแนน</span></p>
+        <div class="line">1. id ต้องเป็นค่าบวก 2. price ต้องไม่ติดลบ</div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>5) ลูกศรที่กำกับว่า “Invariant Guard” ชี้ไปยัง InvalidArgumentException หมายความว่าอย่างไร <span class="pts">1 คะแนน</span></p>
+        <div class="line">กลไกการตรวจสอบความถูกต้องของข้อมูลนำเข้า</div>
+    </div>
+
+    <div class="q">
+        <p>6) เพราะเหตุใด Product จึงถือเป็น “Information Expert” ในการคำนวณราคาหลังลด <span class="pts">1 คะแนน</span></p>
+        <div class="line">เพราะเป็นผู้เก็บข้อมูลที่จำเป็นในการใช้ เช่น ราคาตั้งต้น (Price)</div>
+    </div>
+
+    <h2>ส่วนที่ 2: วิเคราะห์โค้ด (10 คะแนน)</h2>
+
+    <p>พิจารณาโค้ดต่อไปนี้ แล้วตอบคำถาม</p>
+
+<pre class="code">
+&lt;?php declare(strict_types=1);
+
+final class Product
+{
+    public private(set) float $price;
+
+    public function __construct(
+        public readonly int $id,
+        public readonly string $name,
+        float $price,
+    ) {
+        $this-&gt;price = $this-&gt;validatePrice($price);
+    }
+
+    public function applyDiscount(float $percent): void
+    {
+        if ($percent &lt; 0.0 || $percent &gt; 100.0) {
+            throw new InvalidArgumentException('Discount must be between 0 and 100.');
+        }
+
+        $this-&gt;price = round($this-&gt;price * (100.0 - $percent) / 100.0, 2);
+    }
+
+    public function displayPrice(): string
+    {
+        return sprintf('%s (#%d) ราคา: %.2f บาท', $this-&gt;name, $this-&gt;id, $this-&gt;price);
+    }
+
+    private function validatePrice(float $price): float
+    {
+        if ($price &lt; 0.0) {
+            throw new InvalidArgumentException('Price cannot be negative.');
+        }
+
+        return round($price, 2);
+    }
+}
+</pre>
+
+    <div class="q">
+        <p>1) บรรทัดใดป้องกันไม่ให้สร้างสินค้าที่มีราคาติดลบ <span class="pts">2 คะแนน</span></p>
+        <div class="line">if ($price < 0.0) {
+                            throw new InvalidArgumentException('Price cannot be negative.');
+}</div>
+    </div>
+
+    <div class="q">
+        <p>2) เมื่อเรียก <code>new Product(1, 'สมุดโน้ต', 45.00)</code> แล้วเรียก <code>applyDiscount(10)</code> ค่า price จะเป็นเท่าใด จงแสดงวิธีทำ <span class="pts">3 คะแนน</span></p>
+        <div class="line">1. คำนวณส่วนลด 45.00 × (10 / 100) = 4.50 2. นำส่วนลดไปหักจากราคาเดิม 45.00 - 4.50 = 40.50 ดังนั้น price = 40.50 บาท</div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>3) หากเรียก <code>applyDiscount(150)</code> จะเกิดอะไรขึ้น เพราะโค้ดบรรทัดใด <span class="pts">3 คะแนน</span></p>
+        <div class="line">จะเกิด InvalidArgumentException เพราะส่วนลดต้องอยู่ระหว่าง 0–100% แต่ 150 มากกว่า 100 โค้ดที่ใช้ if ($percent < 0.0 || $percent > 100.0) {
+    throw new InvalidArgumentException(
+        'Discount must be between 0 and 100.'
+    );
+}</div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>4) หากภายนอกคลาสเขียนว่า <code>$product-&gt;price = -500;</code> จะเกิดผลใด เพราะเหตุใด <span class="pts">2 คะแนน</span></p>
+        <div class="line">จะเกิด Error เพราะไม่สามารถกำหนดค่าให้ $price จากภายนอกคลาสได้</div>
+        <div class="line"></div>
+    </div>
+
+    <h2>ส่วนที่ 3: เติมโค้ดในช่องว่าง (12 คะแนน)</h2>
+
+    <p>เติมคำในช่องว่าง (1)–(6) ให้คลาสสมบูรณ์ตรงตามข้อกำหนด (ช่องละ 2 คะแนน)</p>
+
+<pre class="code">
+final class Product
+{
+    public (1)________________ float $price;
+
+    public function __construct(
+        public (2)________________ int $id,
+        public readonly string $name,
+        float $price,
+    ) {
+        $this-&gt;price = (3)________________________;
+    }
+
+    public function applyDiscount(float $percent): void
+    {
+        if ((4)________________________________) {
+            throw new (5)________________________('Discount must be between 0 and 100.');
+        }
+
+        $this-&gt;price = round((6)________________________________, 2);
+    }
+}
+</pre>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ช่องที่</th>
+                <th>คำตอบ</th>
+                <th>ช่องที่</th>
+                <th>คำตอบ</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>(1)</td>
+                <td class="fill"> private(set)</td>
+                <td>(4)</td>
+                <td class="fill">$percent < 0.0 || $percent > 100.0</td>
+            </tr>
+            <tr>
+                <td>(2)</td>
+                <td class="fill">readonly</td>
+                <td>(5)</td>
+                <td class="fill">InvalidArgumentException</td>
+            </tr>
+            <tr>
+                <td>(3)</td>
+                <td class="fill">$this->validatePrice($price);</td>
+                <td>(6)</td>
+                <td class="fill">$this->price * (100.0 - $percent) / 100.0</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>ส่วนที่ 4: ทดสอบและบันทึกผล (12 คะแนน)</h2>
+
+    <p>รันโค้ดที่สมบูรณ์แล้วบันทึกผลแต่ละกรณี (กรณีละ 2 คะแนน)</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width:38%;">Test Case</th>
+                <th>ผลลัพธ์ที่คาดหวัง</th>
+                <th>ผลลัพธ์จริง</th>
+                <th style="width:12%;">ผ่าน?</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>new Product(1, 'สมุดโน้ต', 45.00) แล้ว displayPrice()</td>
+                <td class="fill">สมุดโน๊ตราคา 45.00 บาท</td>
+                <td class="fill">สมุดโน๊ตราคา 45.00 บาท</td>
+                <td class="fill">ผ่าน</td>
+            </tr>
+            <tr>
+                <td>applyDiscount(10) แล้ว displayPrice()</td>
+                <td class="fill">สมุดโน๊ตราคา 45.50 บาท</td>
+                <td class="fill">สมุดโน๊ตราคา 45.50 บาท</td>
+                <td class="fill">ผ่าน</td>
+            </tr>
+            <tr>
+                <td>applyDiscount(150)</td>
+                <td class="fill">InvalidArgumentException</td>
+                <td class="fill">เกิด InvalidArgumentException</td>
+                <td class="fill">ผ่าน</td>
+            </tr>
+            <tr>
+                <td>applyDiscount(-5)</td>
+                <td class="fill">InvalidArgumentException</td>
+                <td class="fill">เกิด InvalidArgumentException</td>
+                <td class="fill">ผ่าน</td>
+            </tr>
+            <tr>
+                <td>new Product(2, 'ปากกา', -10)</td>
+                <td class="fill">InvalidArgumentException ราคาติดลบ</td>
+                <td class="fill">เกิด InvalidArgumentException เพราะ ราคาติดลบ</td>
+                <td class="fill">ผ่าน</td>
+            </tr>
+            <tr>
+                <td>$product-&gt;price = 999; (ภายนอกคลาส)</td>
+                <td class="fill">เกิด Error เพราะ $price เป็น private</td>
+                <td class="fill">เกิด Error</td>
+                <td class="fill">ผ่าน</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>ส่วนที่ 5: สะท้อนคิดเชิงออกแบบ OOAD (6 คะแนน)</h2>
+
+    <div class="q">
+        <p>1) คลาส Product แสดงถึง Single Responsibility Principle อย่างไร <span class="pts">2 คะแนน</span></p>
+        <div class="line">คลาส Product มีหน้าที่จัดการข้อมูลสินค้า เช่น เก็บชื่อ รหัส ราคา ตรวจสอบราคา คำนวณส่วนลด และแสดงราคาสินค้า จึงมีความ</div>
+        <div class="line">รับผิดชอบหลักที่เกี่ยวข้องกับ Product โดยตรง</div>
+    </div>
+
+    <div class="q">
+        <p>2) Information Hiding ปรากฏอยู่ในจุดใดของคลาสนี้บ้าง จงยกตัวอย่างอย่างน้อย 2 จุด <span class="pts">2 คะแนน</span></p>
+        <div class="line">ตัวแปร $price เป็น private ทำให้ภายนอกคลาสไม่สามารถแก้ไขราคาโดยตรงได้</div>
+        <div class="line">เมธอด validatePrice() เป็น private ทำให้รายละเอียดการตรวจสอบราคาถูกซ่อนไว้ภายในคลาส</div>
+    </div>
+
+    <div class="q">
+        <p>3) หากต้องการเพิ่มโปรโมชัน “ซื้อครบ 500 บาท ลดเพิ่ม 5%” นักศึกษาจะออกแบบเพิ่มเติมอย่างไร โดยไม่ทำลาย invariant เดิม <span class="pts">2 คะแนน</span></p>
+        <div class="line">เพิ่มเมธอดใหม่ applyPromotion() สำหรับตรวจสอบว่าราคาครบ 500 บาทหรือไม่ แล้วเรียก applyDiscount(5) เพื่อคำนวณ</div>
+        <div class="line">ส่วนลดโดยไม่แก้ไข validatePrice() และยังคงกำหนดให้ราคาไม่ติดลบเหมือนเดิม</div>
+    </div>
+
+    <h2>เกณฑ์การให้คะแนน</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ส่วนที่</th>
+                <th>เนื้อหา</th>
+                <th>คะแนน</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>1</td><td>อ่านแผนภาพแล้วตอบคำถาม</td><td>10</td></tr>
+            <tr><td>2</td><td>วิเคราะห์โค้ด</td><td>10</td></tr>
+            <tr><td>3</td><td>เติมโค้ดในช่องว่าง</td><td>12</td></tr>
+            <tr><td>4</td><td>ทดสอบและบันทึกผล</td><td>12</td></tr>
+            <tr><td>5</td><td>สะท้อนคิดเชิงออกแบบ</td><td>6</td></tr>
+            <tr><td colspan="2"><strong>รวม</strong></td><td><strong>50</strong></td></tr>
+        </tbody>
+    </table>
+
+    
+
+</div>
+
+<script>
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'default',
+        securityLevel: 'loose'
+    });
+</script>
+</body>
+</html>

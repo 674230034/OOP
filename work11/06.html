@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="th">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ใบงานที่ 6 - Email Value Object (OOP PHP 8.4+)</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+
+    <style>
+        :root {
+            color-scheme: light;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans Thai", sans-serif;
+            line-height: 1.75;
+            background: #eef2f7;
+            color: #0f172a;
+        }
+
+        .sheet {
+            width: min(900px, calc(100% - 2rem));
+            margin: 1.5rem auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+            padding: 2rem 2.25rem;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin: 0 0 0.25rem;
+        }
+
+        h2 {
+            font-size: 1.15rem;
+            margin: 1.75rem 0 0.5rem;
+            padding: 0.4rem 0.75rem;
+            background: #eef2ff;
+            border-left: 5px solid #4f46e5;
+            border-radius: 6px;
+        }
+
+        .meta {
+            display: grid;
+            grid-template-columns: 2fr 1.2fr 1fr 0.8fr;
+            gap: 0.75rem;
+            margin: 1rem 0;
+            font-size: 0.95rem;
+        }
+
+        .meta div {
+            border-bottom: 1px solid #94a3b8;
+            padding-bottom: 0.2rem;
+        }
+
+        .objectives li {
+            margin: 0.2rem 0;
+        }
+
+        pre.mermaid {
+            margin: 1rem 0;
+            padding: 1rem;
+            border-radius: 12px;
+            background: #f8fafc;
+            border: 1px dashed rgba(15, 23, 42, 0.2);
+            overflow: auto;
+        }
+
+        pre.code {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            overflow: auto;
+            font-size: 0.88rem;
+            line-height: 1.6;
+        }
+
+        .q {
+            margin: 0.9rem 0;
+        }
+
+        .q p {
+            margin: 0 0 0.35rem;
+        }
+
+        .pts {
+            display: inline-block;
+            background: #f1f5f9;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 0.1rem 0.55rem;
+            margin-left: 0.4rem;
+        }
+
+        .line {
+            height: 2em;
+            border-bottom: 1px solid #94a3b8;
+            margin-bottom: 0.15rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+            margin: 0.75rem 0;
+        }
+
+        th, td {
+            border: 1px solid #94a3b8;
+            padding: 0.5rem 0.6rem;
+            vertical-align: top;
+            text-align: left;
+        }
+
+        th {
+            background: #f1f5f9;
+        }
+
+        td.fill {
+            height: 3.2em;
+        }
+
+        .badge-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            margin: 0.75rem 0;
+        }
+
+        .badge {
+            background: #f1f5f9;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 0.28rem 0.65rem;
+        }
+
+        .note {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border-radius: 10px;
+            padding: 0.7rem 0.9rem;
+            font-size: 0.93rem;
+            margin: 0.75rem 0;
+        }
+
+        .teacher {
+            border-top: 3px dashed #0f172a;
+            margin-top: 2rem;
+            padding-top: 1rem;
+        }
+
+        .answer-key {
+            background: #f0fdf4;
+            border: 1px solid #86efac;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-size: 0.93rem;
+            margin: 0.6rem 0;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .sheet {
+                width: 100%;
+                margin: 0;
+                box-shadow: none;
+                border-radius: 0;
+                padding: 0;
+            }
+
+            .teacher {
+                page-break-before: always;
+            }
+
+            pre.mermaid, pre.code {
+                break-inside: avoid;
+            }
+        }
+
+        @page {
+            size: A4;
+            margin: 14mm;
+        }
+    </style>
+</head>
+
+<body>
+<div class="sheet">
+
+    <h1>ใบงานปฏิบัติการที่ 6</h1>
+    <p style="margin:0;">
+        เรื่อง Value Object สำหรับอีเมลนักศึกษา (Email Value Object)
+        (บริบท: ระบบบัญชีนักศึกษาต้องการตรวจสอบอีเมลก่อนสมัครหรือยืนยันตัวตน)<br />
+        รายวิชา การเขียนโปรแกรมเชิงวัตถุ (PHP 8.4+)
+    </p>
+
+    <div class="meta">
+        <div>ชื่อ-นามสกุล: </div>
+        <div>รหัสนักศึกษา: </div>
+        <div>ชั้นปี/ห้อง: </div>
+        <div>คะแนน: /50</div>
+    </div>
+
+    <p><strong>คำชี้แจง:</strong> ให้นักศึกษาศึกษา Class Diagram ด้านล่าง แล้วทำกิจกรรมทุกส่วนให้ครบถ้วน</p>
+
+    <p><strong>จุดประสงค์การเรียนรู้:</strong></p>
+    <ul class="objectives">
+        <li>อธิบายความแตกต่างของ Value Object กับ Entity ได้</li>
+        <li>ใช้ Static Factory บังคับการตรวจสอบค่าก่อนสร้างวัตถุได้</li>
+        <li>อธิบายความสำคัญของ Immutability ต่อ Value Object ได้</li>
+        <li>ทดสอบการ normalize, การเปรียบเทียบค่า และกรณีผิดพลาดได้ถูกต้อง</li>
+    </ul>
+
+    <h2>แผนภาพอ้างอิง</h2>
+
+    <div class="badge-row">
+        <span class="badge">Value Object</span>
+        <span class="badge">Immutability</span>
+        <span class="badge">SRP</span>
+        <span class="badge">Validation</span>
+    </div>
+
+    <pre class="mermaid">
+classDiagram
+    class Email {
+        &lt;&lt;ValueObject&gt;&gt;
+        +string value
+        -__construct(value)
+        +fromString(value) self
+        +equals(other) bool
+        +toString() string
+        +__toString() string
+    }
+
+    class InvalidArgumentException {
+        &lt;&lt;exception&gt;&gt;
+    }
+
+    Email --> InvalidArgumentException : Validation
+    </pre>
+
+    <div class="note">
+        Value Object ช่วยให้การ validate และความหมายของอีเมลอยู่ในที่เดียว
+        ลดการกระจายกฎตรวจสอบตาม Service หรือ Controller
+    </div>
+
+    <h2>ส่วนที่ 1: อ่านแผนภาพแล้วตอบคำถาม (10 คะแนน)</h2>
+
+    <div class="q">
+        <p>1) «ValueObject» ที่กำกับคลาส Email หมายความว่าอย่างไร และแตกต่างจาก Entity อย่างไร <span class="pts">2 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>2) เหตุใด constructor <code>-__construct(value)</code> จึงเป็น private และบังคับสร้างผ่าน <code>+fromString(value)</code> รูปแบบนี้นเรียกว่าอะไร <span class="pts">2 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>3) “Immutability” หมายความว่าอย่างไร และใน PHP 8.4 ใช้ keyword ใดทำให้ Email เปลี่ยนแปลงไม่ได้ <span class="pts">2 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>4) ลูกศร “Validation” ชี้ไปยัง InvalidArgumentException หมายถึงพฤติกรรมใด และเกิดขึ้นเมื่อใด <span class="pts">2 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>5) เหตุใดเมธอด equals(other) จึงเปรียบเทียบด้วย “ค่า” แทนการเปรียบเทียบ identity ของ object <span class="pts">1 คะแนน</span></p>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>6) เมธอด <code>+__toString()</code> มีประโยชน์อย่างไรต่อการใช้งานจริง <span class="pts">1 คะแนน</span></p>
+        <div class="line"></div>
+    </div>
+
+    <h2>ส่วนที่ 2: วิเคราะห์โค้ด (10 คะแนน)</h2>
+
+    <p>พิจารณาโค้ดต่อไปนี้ แล้วตอบคำถาม</p>
+
+<pre class="code">
+&lt;?php declare(strict_types=1);
+
+final readonly class Email implements Stringable
+{
+    private function __construct(public string $value) {}
+
+    public static function fromString(string $value): self
+    {
+        $normalized = strtolower(trim($value));
+
+        if (filter_var($normalized, FILTER_VALIDATE_EMAIL) === false) {
+            throw new InvalidArgumentException('Invalid email address.');
+        }
+
+        return new self($normalized);
+    }
+
+    public function equals(self $other): bool
+    {
+        return $this-&gt;value === $other-&gt;value;
+    }
+
+    public function toString(): string
+    {
+        return $this-&gt;value;
+    }
+
+    public function __toString(): string
+    {
+        return $this-&gt;value;
+    }
+}
+
+$studentEmail = Email::fromString('Student@Example.ac.th ');
+echo $studentEmail-&gt;toString(), PHP_EOL;
+
+$anotherEmail = Email::fromString('student@example.ac.th');
+var_dump($studentEmail-&gt;equals($anotherEmail));
+</pre>
+
+    <div class="q">
+        <p>1) ผลลัพธ์ของ <code>Email::fromString('Student@Example.ac.th ')</code> คืออะไร จงอธิบายการทำงานทีละขั้นตอน <span class="pts">3 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>2) การเรียก <code>Email::fromString('student@invalid')</code> จะเกิดอะไรขึ้น เพราะเหตุใด <span class="pts">2 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>3) เหตุใด <code>$studentEmail-&gt;equals($anotherEmail)</code> จึงคืนค่า true ทั้งที่ข้อความต้นทางต่างกัน <span class="pts">3 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>4) หากตัด keyword <code>readonly</code> ออก จะเกิดความเสี่ยงใดต่อ Value Object <span class="pts">2 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <h2>ส่วนที่ 3: เติมโค้ดในช่องว่าง (12 คะแนน)</h2>
+
+    <p>เติมคำในช่องว่าง (1)–(6) ให้โค้ดสมบูรณ์ตรงตามข้อกำหนด (ช่องละ 2 คะแนน)</p>
+
+<pre class="code">
+final (1)________________ class Email implements Stringable
+{
+    (2)________________ function __construct(public string $value) {}
+
+    public (3)________________ function fromString(string $value): self
+    {
+        $normalized = (4)________________(trim($value));
+
+        if ((5)________________($normalized, FILTER_VALIDATE_EMAIL) === false) {
+            throw new InvalidArgumentException('Invalid email address.');
+        }
+
+        return new (6)________________($normalized);
+    }
+
+    public function equals(self $other): bool
+    {
+        return $this-&gt;value === $other-&gt;value;
+    }
+}
+</pre>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ช่องที่</th>
+                <th>คำตอบ</th>
+                <th>ช่องที่</th>
+                <th>คำตอบ</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>(1)</td>
+                <td class="fill"></td>
+                <td>(4)</td>
+                <td class="fill"></td>
+            </tr>
+            <tr>
+                <td>(2)</td>
+                <td class="fill"></td>
+                <td>(5)</td>
+                <td class="fill"></td>
+            </tr>
+            <tr>
+                <td>(3)</td>
+                <td class="fill"></td>
+                <td>(6)</td>
+                <td class="fill"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>ส่วนที่ 4: ทดสอบและบันทึกผล (12 คะแนน)</h2>
+
+    <p>รันโค้ดแล้วบันทึกผลแต่ละกรณี (กรณีละ 2 คะแนน)</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width:42%;">Test Case</th>
+                <th>ผลลัพธ์ที่คาดหวัง</th>
+                <th>ผลลัพธ์จริง</th>
+                <th style="width:10%;">ผ่าน?</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Email::fromString('Student@Example.ac.th ') แล้ว toString()</td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+            </tr>
+            <tr>
+                <td>Email::fromString('invalid-email')</td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+            </tr>
+            <tr>
+                <td>equals ระหว่าง ' a@b.co ' กับ 'A@B.CO'</td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+            </tr>
+            <tr>
+                <td>Email::fromString('')</td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+            </tr>
+            <tr>
+                <td>echo $email; (ใช้ __toString โดยอ้อม)</td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+            </tr>
+            <tr>
+                <td>$email-&gt;value = 'x@y.z'; (พยายามแก้ไขค่า)</td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>ส่วนที่ 5: สะท้อนคิดเชิงออกแบบ OOAD (6 คะแนน)</h2>
+
+    <div class="q">
+        <p>1) Email Value Object ช่วยลดการเขียนกฎตรวจสอบซ้ำซ้อน (DRY) ในระบบได้อย่างไร <span class="pts">2 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>2) เหตุใด Immutability จึงสำคัญต่อ Value Object จงยกตัวอย่างปัญหาหากค่าถูกแก้ไขได้หลังสร้าง <span class="pts">2 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>3) Email สามารถนำไปใช้ร่วมกับ Use Case อื่น (เช่น RegisterUserService ข้อ 10) ได้อย่างไร และดีอย่างไร <span class="pts">2 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <h2>เกณฑ์การให้คะแนน</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ส่วนที่</th>
+                <th>เนื้อหา</th>
+                <th>คะแนน</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>1</td><td>อ่านแผนภาพแล้วตอบคำถาม</td><td>10</td></tr>
+            <tr><td>2</td><td>วิเคราะห์โค้ด</td><td>10</td></tr>
+            <tr><td>3</td><td>เติมโค้ดในช่องว่าง</td><td>12</td></tr>
+            <tr><td>4</td><td>ทดสอบและบันทึกผล</td><td>12</td></tr>
+            <tr><td>5</td><td>สะท้อนคิดเชิงออกแบบ</td><td>6</td></tr>
+            <tr><td colspan="2"><strong>รวม</strong></td><td><strong>50</strong></td></tr>
+        </tbody>
+    </table>
+
+
+</div>
+
+<script>
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'default',
+        securityLevel: 'loose'
+    });
+</script>
+</body>
+</html>

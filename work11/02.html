@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="th">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ใบงานที่ 2 - BankAccount และ Domain Exception (OOP PHP 8.4+)</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+
+    <style>
+        :root {
+            color-scheme: light;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans Thai", sans-serif;
+            line-height: 1.75;
+            background: #eef2f7;
+            color: #0f172a;
+        }
+
+        .sheet {
+            width: min(900px, calc(100% - 2rem));
+            margin: 1.5rem auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+            padding: 2rem 2.25rem;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin: 0 0 0.25rem;
+        }
+
+        h2 {
+            font-size: 1.15rem;
+            margin: 1.75rem 0 0.5rem;
+            padding: 0.4rem 0.75rem;
+            background: #eef2ff;
+            border-left: 5px solid #4f46e5;
+            border-radius: 6px;
+        }
+
+        .meta {
+            display: grid;
+            grid-template-columns: 2fr 1.2fr 1fr 0.8fr;
+            gap: 0.75rem;
+            margin: 1rem 0;
+            font-size: 0.95rem;
+        }
+
+        .meta div {
+            border-bottom: 1px solid #94a3b8;
+            padding-bottom: 0.2rem;
+        }
+
+        .objectives li {
+            margin: 0.2rem 0;
+        }
+
+        pre.mermaid {
+            margin: 1rem 0;
+            padding: 1rem;
+            border-radius: 12px;
+            background: #f8fafc;
+            border: 1px dashed rgba(15, 23, 42, 0.2);
+            overflow: auto;
+        }
+
+        pre.code {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            overflow: auto;
+            font-size: 0.88rem;
+            line-height: 1.6;
+        }
+
+        .q {
+            margin: 0.9rem 0;
+        }
+
+        .q p {
+            margin: 0 0 0.35rem;
+        }
+
+        .pts {
+            display: inline-block;
+            background: #f1f5f9;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 0.1rem 0.55rem;
+            margin-left: 0.4rem;
+        }
+
+        .line {
+            height: 2em;
+            border-bottom: 1px solid #94a3b8;
+            margin-bottom: 0.15rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+            margin: 0.75rem 0;
+        }
+
+        th, td {
+            border: 1px solid #94a3b8;
+            padding: 0.5rem 0.6rem;
+            vertical-align: top;
+            text-align: left;
+        }
+
+        th {
+            background: #f1f5f9;
+        }
+
+        td.fill {
+            height: 3.2em;
+        }
+
+        .badge-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            margin: 0.75rem 0;
+        }
+
+        .badge {
+            background: #f1f5f9;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 0.28rem 0.65rem;
+        }
+
+        .note {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border-radius: 10px;
+            padding: 0.7rem 0.9rem;
+            font-size: 0.93rem;
+            margin: 0.75rem 0;
+        }
+
+        .teacher {
+            border-top: 3px dashed #0f172a;
+            margin-top: 2rem;
+            padding-top: 1rem;
+        }
+
+        .answer-key {
+            background: #f0fdf4;
+            border: 1px solid #86efac;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-size: 0.93rem;
+            margin: 0.6rem 0;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .sheet {
+                width: 100%;
+                margin: 0;
+                box-shadow: none;
+                border-radius: 0;
+                padding: 0;
+            }
+
+            .teacher {
+                page-break-before: always;
+            }
+
+            pre.mermaid, pre.code {
+                break-inside: avoid;
+            }
+        }
+
+        @page {
+            size: A4;
+            margin: 14mm;
+        }
+    </style>
+</head>
+
+<body>
+<div class="sheet">
+
+    <h1>ใบงานปฏิบัติการที่ 2</h1>
+    <p style="margin:0;">
+        เรื่อง การรักษายอดคงเหลือและ Domain Exception ด้วยคลาส BankAccount
+        (บริบท: กระเป๋าเงินอิเล็กทรอนิกส์ของนักศึกษา)<br />
+        รายวิชา การเขียนโปรแกรมเชิงวัตถุ (PHP 8.4+)
+    </p>
+
+    <div class="meta">
+        <div>ชื่อ-นามสกุล: </div>
+        <div>รหัสนักศึกษา: </div>
+        <div>ชั้นปี/ห้อง: </div>
+        <div>คะแนน: /50</div>
+    </div>
+
+    <p><strong>คำชี้แจง:</strong> ให้นักศึกษาศึกษา Class Diagram ด้านล่าง แล้วทำกิจกรรมทุกส่วนให้ครบถ้วน</p>
+
+    <p><strong>จุดประสงค์การเรียนรู้:</strong></p>
+    <ul class="objectives">
+        <li>อธิบายแนวคิด Encapsulation และ Tell Don't Ask จากแผนภาพได้</li>
+        <li>ออกแบบ Domain Exception แยกจากความผิดพลาดเชิงเทคนิคได้</li>
+        <li>เขียนโค้ดควบคุม invariant ของยอดคงเหลือได้</li>
+        <li>ทดสอบกรณีผิดพลาดและอธิบายผลลัพธ์ได้</li>
+    </ul>
+
+    <h2>แผนภาพอ้างอิง</h2>
+
+    <div class="badge-row">
+        <span class="badge">Encapsulation</span>
+        <span class="badge">Domain Exception</span>
+        <span class="badge">SRP</span>
+        <span class="badge">Tell Don't Ask</span>
+    </div>
+
+    <pre class="mermaid">
+classDiagram
+    class BankAccount {
+        &lt;&lt;Invariant&gt;&gt;
+        +string accountNumber
+        +float balance
+        +__construct(accountNumber)
+        +deposit(amount) void
+        +withdraw(amount) void
+        +transferTo(target, amount) void
+        -assertPositive(amount) void
+    }
+
+    class InsufficientFunds {
+        &lt;&lt;DomainException&gt;&gt;
+    }
+
+    class RuntimeException {
+        &lt;&lt;exception&gt;&gt;
+    }
+
+    class InvalidArgumentException {
+        &lt;&lt;exception&gt;&gt;
+    }
+
+    InsufficientFunds --|> RuntimeException : extends
+    BankAccount --> InsufficientFunds : Domain Rule
+    BankAccount --> InvalidArgumentException : Validation
+    BankAccount --> BankAccount : Tell Don't Ask
+    </pre>
+
+    <div class="note">
+        การใช้ Domain Exception ทำให้กฎทางธุรกิจสื่อความหมายชัดเจน
+        และช่วยแยกความผิดพลาดเชิงธุรกิจออกจากความผิดพลาดเชิงเทคนิค
+    </div>
+
+    <h2>ส่วนที่ 1: อ่านแผนภาพแล้วตอบคำถาม (10 คะแนน)</h2>
+
+    <div class="q">
+        <p>1) Stereotype «Invariant» ที่กำกับคลาส BankAccount สื่อความหมายว่าอย่างไร <span class="pts">2 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>2) สัญลักษณ์ <strong>+</strong> และ <strong>-</strong> หน้าสมาชิกของคลาส หมายถึงอะไร <span class="pts">2 คะแนน</span></p>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>3) property <code>balance</code> อ่านได้จากภายนอกแต่แก้ไขโดยตรงไม่ได้ ใน PHP 8.4 ใช้กลไกใด และเหตุใดจึงออกแบบเช่นนั้น <span class="pts">2 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>4) จงระบุ Invariant ของคลาส BankAccount มา 2 ข้อ <span class="pts">2 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>5) ลูกศร “Domain Rule” และ “Validation” ชี้ไปยัง Exception คนละคลาส หมายถึงความแตกต่างอย่างไร <span class="pts">1 คะแนน</span></p>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>6) เพราะเหตุใด InsufficientFunds จึงสืบทอด RuntimeException และการมี Domain Exception ดีกว่าใช้ Exception ทั่วไปอย่างไร <span class="pts">1 คะแนน</span></p>
+        <div class="line"></div>
+    </div>
+
+    <h2>ส่วนที่ 2: วิเคราะห์โค้ด (10 คะแนน)</h2>
+
+    <p>พิจารณาโค้ดต่อไปนี้ แล้วตอบคำถาม</p>
+
+<pre class="code">
+&lt;?php declare(strict_types=1);
+
+final class InsufficientFunds extends RuntimeException {}
+
+final class BankAccount
+{
+    public private(set) float $balance = 0.0;
+
+    public function __construct(public readonly string $accountNumber) {}
+
+    public function deposit(float $amount): void
+    {
+        $this-&gt;assertPositive($amount);
+        $this-&gt;balance += $amount;
+    }
+
+    public function withdraw(float $amount): void
+    {
+        $this-&gt;assertPositive($amount);
+
+        if ($amount &gt; $this-&gt;balance) {
+            throw new InsufficientFunds('Insufficient balance.');
+        }
+
+        $this-&gt;balance -= $amount;
+    }
+
+    public function transferTo(self $target, float $amount): void
+    {
+        $this-&gt;withdraw($amount);
+        $target-&gt;deposit($amount);
+    }
+
+    private function assertPositive(float $amount): void
+    {
+        if ($amount &lt;= 0.0) {
+            throw new InvalidArgumentException('Amount must be positive.');
+        }
+    }
+}
+</pre>
+
+    <div class="q">
+        <p>1) โค้ดส่วนใดป้องกันการฝากหรือถอนจำนวนติดลบและศูนย์ <span class="pts">2 คะแนน</span></p>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>2) เมื่อเรียก <code>deposit(300)</code> แล้วเรียก <code>withdraw(120)</code> ค่า balance จะเป็นเท่าใด จงแสดงวิธีทำ <span class="pts">3 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>3) หากยอดคงเหลือ 180 แล้วเรียก <code>withdraw(500)</code> จะเกิดอะไรขึ้น เพราะโค้ดบรรทัดใด <span class="pts">3 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>4) หากภายนอกคลาสเขียนว่า <code>$a-&gt;balance = 9999;</code> จะเกิดผลใด เพราะเหตุใด <span class="pts">2 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <h2>ส่วนที่ 3: เติมโค้ดในช่องว่าง (12 คะแนน)</h2>
+
+    <p>เติมคำในช่องว่าง (1)–(6) ให้คลาสสมบูรณ์ตรงตามข้อกำหนด (ช่องละ 2 คะแนน)</p>
+
+<pre class="code">
+final class BankAccount
+{
+    public (1)________________ float $balance = 0.0;
+
+    public function __construct(public (2)________________ string $accountNumber) {}
+
+    public function withdraw(float $amount): void
+    {
+        $this-&gt;assertPositive($amount);
+
+        if ((3)________________________) {
+            throw new (4)________________('Insufficient balance.');
+        }
+
+        $this-&gt;balance -= $amount;
+    }
+
+    public function transferTo(self $target, float $amount): void
+    {
+        $this-&gt;(5)________________;
+        $target-&gt;(6)________________;
+    }
+}
+</pre>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ช่องที่</th>
+                <th>คำตอบ</th>
+                <th>ช่องที่</th>
+                <th>คำตอบ</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>(1)</td>
+                <td class="fill"></td>
+                <td>(4)</td>
+                <td class="fill"></td>
+            </tr>
+            <tr>
+                <td>(2)</td>
+                <td class="fill"></td>
+                <td>(5)</td>
+                <td class="fill"></td>
+            </tr>
+            <tr>
+                <td>(3)</td>
+                <td class="fill"></td>
+                <td>(6)</td>
+                <td class="fill"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>ส่วนที่ 4: ทดสอบและบันทึกผล (12 คะแนน)</h2>
+
+    <p>รันโค้ดที่สมบูรณ์ตามลำดับขั้นตอน แล้วบันทึกผลแต่ละกรณี (กรณีละ 2 คะแนน)</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width:40%;">Test Case</th>
+                <th>ผลลัพธ์ที่คาดหวัง</th>
+                <th>ผลลัพธ์จริง</th>
+                <th style="width:10%;">ผ่าน?</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>$a = new BankAccount('STU-680001'); $a-&gt;deposit(300);</td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+            </tr>
+            <tr>
+                <td>$a-&gt;withdraw(120);</td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+            </tr>
+            <tr>
+                <td>$a-&gt;withdraw(500);</td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+            </tr>
+            <tr>
+                <td>$a-&gt;deposit(-50);</td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+            </tr>
+            <tr>
+                <td>$b = new BankAccount('STU-680002'); $a-&gt;transferTo($b, 100);</td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+            </tr>
+            <tr>
+                <td>$a-&gt;balance = 9999; (ภายนอกคลาส)</td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>ส่วนที่ 5: สะท้อนคิดเชิงออกแบบ OOAD (6 คะแนน)</h2>
+
+    <div class="q">
+        <p>1) คลาส BankAccount แสดงถึง Single Responsibility Principle อย่างไร <span class="pts">2 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>2) หลัก “Tell Don't Ask” หมายความว่าอย่างไร และเมธอด transferTo สะท้อนหลักการนี้อย่างไร <span class="pts">2 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>3) เหตุใดจึงควรสร้าง Domain Exception อย่าง InsufficientFunds แทนการใช้ Exception เดียวทุกกรณี <span class="pts">2 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <h2>เกณฑ์การให้คะแนน</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ส่วนที่</th>
+                <th>เนื้อหา</th>
+                <th>คะแนน</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>1</td><td>อ่านแผนภาพแล้วตอบคำถาม</td><td>10</td></tr>
+            <tr><td>2</td><td>วิเคราะห์โค้ด</td><td>10</td></tr>
+            <tr><td>3</td><td>เติมโค้ดในช่องว่าง</td><td>12</td></tr>
+            <tr><td>4</td><td>ทดสอบและบันทึกผล</td><td>12</td></tr>
+            <tr><td>5</td><td>สะท้อนคิดเชิงออกแบบ</td><td>6</td></tr>
+            <tr><td colspan="2"><strong>รวม</strong></td><td><strong>50</strong></td></tr>
+        </tbody>
+    </table>
+
+
+
+<script>
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'default',
+        securityLevel: 'loose'
+    });
+</script>
+</body>
+</html>

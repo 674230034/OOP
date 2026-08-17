@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="th">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ใบงานที่ 9 - Trait Conflict และ Audit Log (OOP PHP 8.4+)</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+
+    <style>
+        :root {
+            color-scheme: light;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans Thai", sans-serif;
+            line-height: 1.75;
+            background: #eef2f7;
+            color: #0f172a;
+        }
+
+        .sheet {
+            width: min(900px, calc(100% - 2rem));
+            margin: 1.5rem auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+            padding: 2rem 2.25rem;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin: 0 0 0.25rem;
+        }
+
+        h2 {
+            font-size: 1.15rem;
+            margin: 1.75rem 0 0.5rem;
+            padding: 0.4rem 0.75rem;
+            background: #eef2ff;
+            border-left: 5px solid #4f46e5;
+            border-radius: 6px;
+        }
+
+        .meta {
+            display: grid;
+            grid-template-columns: 2fr 1.2fr 1fr 0.8fr;
+            gap: 0.75rem;
+            margin: 1rem 0;
+            font-size: 0.95rem;
+        }
+
+        .meta div {
+            border-bottom: 1px solid #94a3b8;
+            padding-bottom: 0.2rem;
+        }
+
+        .objectives li {
+            margin: 0.2rem 0;
+        }
+
+        pre.mermaid {
+            margin: 1rem 0;
+            padding: 1rem;
+            border-radius: 12px;
+            background: #f8fafc;
+            border: 1px dashed rgba(15, 23, 42, 0.2);
+            overflow: auto;
+        }
+
+        pre.code {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            overflow: auto;
+            font-size: 0.88rem;
+            line-height: 1.6;
+        }
+
+        .q {
+            margin: 0.9rem 0;
+        }
+
+        .q p {
+            margin: 0 0 0.35rem;
+        }
+
+        .pts {
+            display: inline-block;
+            background: #f1f5f9;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 0.1rem 0.55rem;
+            margin-left: 0.4rem;
+        }
+
+        .line {
+            height: 2em;
+            border-bottom: 1px solid #94a3b8;
+            margin-bottom: 0.15rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+            margin: 0.75rem 0;
+        }
+
+        th, td {
+            border: 1px solid #94a3b8;
+            padding: 0.5rem 0.6rem;
+            vertical-align: top;
+            text-align: left;
+        }
+
+        th {
+            background: #f1f5f9;
+        }
+
+        td.fill {
+            height: 3.2em;
+        }
+
+        .badge-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            margin: 0.75rem 0;
+        }
+
+        .badge {
+            background: #f1f5f9;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 0.28rem 0.65rem;
+        }
+
+        .note {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border-radius: 10px;
+            padding: 0.7rem 0.9rem;
+            font-size: 0.93rem;
+            margin: 0.75rem 0;
+        }
+
+        .teacher {
+            border-top: 3px dashed #0f172a;
+            margin-top: 2rem;
+            padding-top: 1rem;
+        }
+
+        .answer-key {
+            background: #f0fdf4;
+            border: 1px solid #86efac;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-size: 0.93rem;
+            margin: 0.6rem 0;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .sheet {
+                width: 100%;
+                margin: 0;
+                box-shadow: none;
+                border-radius: 0;
+                padding: 0;
+            }
+
+            .teacher {
+                page-break-before: always;
+            }
+
+            pre.mermaid, pre.code {
+                break-inside: avoid;
+            }
+        }
+
+        @page {
+            size: A4;
+            margin: 14mm;
+        }
+    </style>
+</head>
+
+<body>
+<div class="sheet">
+
+    <h1>ใบงานปฏิบัติการที่ 9</h1>
+    <p style="margin:0;">
+        เรื่อง แก้ Trait Conflict และสร้าง Audit Log สำหรับเอกสารทะเบียนนักศึกษา
+        (บริบท: ใบสมัครชมรม ใบเปลี่ยนคำนำหน้า หรือเอกสารขอใช้สถานที่)<br />
+        รายวิชา การเขียนโปรแกรมเชิงวัตถุ (PHP 8.4+)
+    </p>
+
+    <div class="meta">
+        <div>ชื่อ-นามสกุล: </div>
+        <div>รหัสนักศึกษา: </div>
+        <div>ชั้นปี/ห้อง: </div>
+        <div>คะแนน: /50</div>
+    </div>
+
+    <p><strong>คำชี้แจง:</strong> ให้นักศึกษาศึกษา Class Diagram ด้านล่าง แล้วทำกิจกรรมทุกส่วนให้ครบถ้วน</p>
+
+    <p><strong>จุดประสงค์การเรียนรู้:</strong></p>
+    <ul class="objectives">
+        <li>อธิบายความแตกต่างของ Trait กับ Class และ Interface ได้</li>
+        <li>แก้เมธอดชนกันระหว่าง Trait ด้วย insteadof และ as ได้</li>
+        <li>อธิบายหลัก DRY และ Separation of Concerns จากการใช้ Trait ได้</li>
+        <li>ทดสอบผลลัพธ์ของ createdAt, auditTimestamp และ auditLog ได้ถูกต้อง</li>
+    </ul>
+
+    <h2>แผนภาพอ้างอิง</h2>
+
+    <div class="badge-row">
+        <span class="badge">Trait Composition</span>
+        <span class="badge">DRY</span>
+        <span class="badge">Separation of Concerns</span>
+        <span class="badge">Conflict Resolution</span>
+    </div>
+
+    <pre class="mermaid">
+classDiagram
+    class Timestampable {
+        &lt;&lt;trait&gt;&gt;
+        +timestamp() string
+    }
+
+    class Auditable {
+        &lt;&lt;trait&gt;&gt;
+        +timestamp() string
+        +auditMessage() string
+    }
+
+    class Document {
+        &lt;&lt;ConflictResolution&gt;&gt;
+        +createdAt() string
+        +timestamp() string
+        +auditMessage() string
+        +auditTimestamp() string
+        +auditLog() string
+    }
+
+    Document --> Timestampable : insteadof
+    Document --> Auditable : alias
+    </pre>
+
+    <div class="note">
+        Trait ช่วย reuse พฤติกรรมข้ามคลาสได้
+        แต่เมื่อเมธอดชนกันต้องระบุแหล่งที่มาหลักและ alias อย่างชัดเจน
+    </div>
+
+    <h2>ส่วนที่ 1: อ่านแผนภาพแล้วตอบคำถาม (10 คะแนน)</h2>
+
+    <div class="q">
+        <p>1) «trait» คืออะไร แตกต่างจาก class และ interface อย่างไร <span class="pts">2 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>2) หากคลาส Document ใช้ Timestampable และ Auditable โดยไม่ระบุกฎแก้ conflict จะเกิดอะไรขึ้น <span class="pts">2 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>3) คำสั่ง <code>Timestampable::timestamp insteadof Auditable</code> มีความหมายว่าอย่างไร <span class="pts">2 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>4) คำสั่ง <code>Auditable::timestamp as auditTimestamp</code> ทำหน้าที่อะไร และเหตุใดจึงจำเป็นในกรณีนี้ <span class="pts">2 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>5) หลังแก้ conflict แล้ว Document มีเมธอดใดให้ใช้งานบ้าง จง liệt kê ตามแผนภาพ <span class="pts">1 คะแนน</span></p>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>6) การใช้ Trait ในข้อนี้สอดคล้องกับหลัก DRY และ Separation of Concerns อย่างไร <span class="pts">1 คะแนน</span></p>
+        <div class="line"></div>
+    </div>
+
+    <h2>ส่วนที่ 2: วิเคราะห์โค้ด (10 คะแนน)</h2>
+
+    <p>พิจารณาโค้ดต่อไปนี้ แล้วตอบคำถาม</p>
+
+<pre class="code">
+&lt;?php declare(strict_types=1);
+
+trait Timestampable
+{
+    public function timestamp(): string
+    {
+        return 'Created: ' . date('c');
+    }
+}
+
+trait Auditable
+{
+    public function timestamp(): string
+    {
+        return 'Audited: ' . date('c');
+    }
+
+    public function auditMessage(): string
+    {
+        return 'Student document was audited.';
+    }
+}
+
+final class Document
+{
+    use Timestampable, Auditable {
+        Timestampable::timestamp insteadof Auditable;
+        Auditable::timestamp as auditTimestamp;
+    }
+
+    public function createdAt(): string
+    {
+        return $this-&gt;timestamp();
+    }
+
+    public function auditLog(): string
+    {
+        return sprintf('%s | %s', $this-&gt;auditTimestamp(), $this-&gt;auditMessage());
+    }
+}
+
+$doc = new Document();
+
+echo $doc-&gt;createdAt(), PHP_EOL;
+echo $doc-&gt;auditLog(), PHP_EOL;
+</pre>
+
+    <div class="q">
+        <p>1) การเรียก <code>$doc-&gt;createdAt()</code> ให้ผลลัพธ์ขึ้นต้นด้วยคำว่าอะไร เพราะใช้ timestamp() ของ Trait ใด <span class="pts">3 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>2) การเรียก <code>$doc-&gt;auditTimestamp()</code> ให้ผลลัพธ์ขึ้นต้นด้วยคำว่าอะไร ทั้งที่ไม่ได้ประกาศเมธอดนี้ไว้ใน Document โดยตรง <span class="pts">3 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>3) หากคงคำสั่ง <code>as</code> ไว้แต่ลบ <code>insteadof</code> ออก จะเกิดอะไรขึ้น เพราะเหตุใด <span class="pts">2 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>4) เหตุใดจึงไม่ควรใช้ Trait พร่ำเพรื่อจนพฤติกรรมของคลาสกระจัดกระจาย จงอธิบายด้วยหลัก Separation of Concerns <span class="pts">2 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <h2>ส่วนที่ 3: เติมโค้ดในช่องว่าง (12 คะแนน)</h2>
+
+    <p>เติมคำในช่องว่าง (1)–(6) ให้โค้ดสมบูรณ์ตรงตามข้อกำหนด (ช่องละ 2 คะแนน)</p>
+
+<pre class="code">
+(1)________________ Timestampable
+{
+    public function timestamp(): string
+    {
+        return 'Created: ' . date('c');
+    }
+}
+
+final class Document
+{
+    (2)________________ Timestampable, Auditable {
+        Timestampable::timestamp (3)________________ Auditable;
+        Auditable::timestamp (4)________ auditTimestamp;
+    }
+
+    public function createdAt(): string
+    {
+        return $this-&gt;(5)________________();
+    }
+
+    public function auditLog(): string
+    {
+        return sprintf('%s | %s', $this-&gt;(6)________________(), $this-&gt;auditMessage());
+    }
+}
+</pre>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ช่องที่</th>
+                <th>คำตอบ</th>
+                <th>ช่องที่</th>
+                <th>คำตอบ</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>(1)</td>
+                <td class="fill"></td>
+                <td>(4)</td>
+                <td class="fill"></td>
+            </tr>
+            <tr>
+                <td>(2)</td>
+                <td class="fill"></td>
+                <td>(5)</td>
+                <td class="fill"></td>
+            </tr>
+            <tr>
+                <td>(3)</td>
+                <td class="fill"></td>
+                <td>(6)</td>
+                <td class="fill"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>ส่วนที่ 4: ทดสอบและบันทึกผล (12 คะแนน)</h2>
+
+    <p>รันโค้ดแล้วบันทึกผลแต่ละกรณี (กรณีละ 2 คะแนน)</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width:42%;">Test Case</th>
+                <th>ผลลัพธ์ที่คาดหวัง</th>
+                <th>ผลลัพธ์จริง</th>
+                <th style="width:10%;">ผ่าน?</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>$doc-&gt;createdAt()</td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+            </tr>
+            <tr>
+                <td>$doc-&gt;timestamp()</td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+            </tr>
+            <tr>
+                <td>$doc-&gt;auditTimestamp()</td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+            </tr>
+            <tr>
+                <td>$doc-&gt;auditMessage()</td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+            </tr>
+            <tr>
+                <td>$doc-&gt;auditLog()</td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+            </tr>
+            <tr>
+                <td>ใช้ทั้งสอง Trait โดยไม่ระบุ insteadof/alias</td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+                <td class="fill"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>ส่วนที่ 5: สะท้อนคิดเชิงออกแบบ OOAD (6 คะแนน)</h2>
+
+    <div class="q">
+        <p>1) Trait Composition แตกต่างจาก Inheritance อย่างไร และควรเลือกใช้ Trait เมื่อใด <span class="pts">2 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>2) ตัวอย่างนี้แสดงหลัก DRY อย่างไร จงอธิบาย <span class="pts">2 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <div class="q">
+        <p>3) หากในอนาคตเพิ่ม Trait SoftDeletable เข้ามาอีก นักศึกษาต้องระวังเรื่องใดเพื่อไม่ให้เกิด conflict ใหม่ <span class="pts">2 คะแนน</span></p>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <h2>เกณฑ์การให้คะแนน</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ส่วนที่</th>
+                <th>เนื้อหา</th>
+                <th>คะแนน</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>1</td><td>อ่านแผนภาพแล้วตอบคำถาม</td><td>10</td></tr>
+            <tr><td>2</td><td>วิเคราะห์โค้ด</td><td>10</td></tr>
+            <tr><td>3</td><td>เติมโค้ดในช่องว่าง</td><td>12</td></tr>
+            <tr><td>4</td><td>ทดสอบและบันทึกผล</td><td>12</td></tr>
+            <tr><td>5</td><td>สะท้อนคิดเชิงออกแบบ</td><td>6</td></tr>
+            <tr><td colspan="2"><strong>รวม</strong></td><td><strong>50</strong></td></tr>
+        </tbody>
+    </table>
+
+</div>
+
+<script>
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'default',
+        securityLevel: 'loose'
+    });
+</script>
+</body>
+</html>
