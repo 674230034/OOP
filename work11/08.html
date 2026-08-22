@@ -105,6 +105,7 @@
             height: 2em;
             border-bottom: 1px solid #94a3b8;
             margin-bottom: 0.15rem;
+            color: red;
         }
 
         table {
@@ -194,6 +195,9 @@
             size: A4;
             margin: 14mm;
         }
+        .fill{
+            color: red;
+        }
     </style>
 </head>
 
@@ -208,9 +212,9 @@
     </p>
 
     <div class="meta">
-        <div>ชื่อ-นามสกุล: </div>
-        <div>รหัสนักศึกษา: </div>
-        <div>ชั้นปี/ห้อง: </div>
+        <div>ชื่อ-นามสกุล: น.ส.ปภัสสร แย้มชื่น</div>
+        <div>รหัสนักศึกษา: 674230034</div>
+        <div>ชั้นปี/ห้อง: 67/44</div>
         <div>คะแนน: /50</div>
     </div>
 
@@ -277,36 +281,36 @@ classDiagram
 
     <div class="q">
         <p>1) «interface» NotificationChannel ที่มีเมธอด <code>+send(recipient, message) : void</code> ทำหน้าที่อะไรในระบบ <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">ทำหน้าที่เป็นตัวกลางแอบสแตรกชันที่กำหนดโครงสร้างพฤติกรรมบังคับเพื่อให้ทุก ๆ ช่องทางบริการส่งข้อมูลดำเนินการและสื่อสารร่วมกันเป็นระบบเดียวได้</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>2) EmailChannel และ SmsChannel ถูกกำกับว่า «Strategy» หมายความว่าอย่างไร หากต้องการเพิ่ม LineChannel ต้องทำอย่างไร <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">หมายถึงกลุ่มคลาสที่เป็นตัวกำหนดอัลกอริทึมวิธีการส่งสารในแต่ละช่องทางเทคโนโลยี</div>
+        <div class="line">การเพิ่ม เขียนคลาสชื่อ LineChannel implements NotificationChannel ขึ้นมาใหม่และเติมลอจิกส่งข้อมูลลงไป</div>
     </div>
 
     <div class="q">
         <p>3) ลูกศร “Polymorphism / DIP” จาก Notifier ชี้ไปยัง NotificationChannel สื่อความหมายว่าอย่างไร <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">สื่อความหมายว่า คลาส Notifier พึ่งพาอาศัยการสั่งงานแบบพหุสัณฐาน (Polymorphism) วิ่งผ่านอินเทอร์เฟซตรงกลางแทนที่จะ</div>
+        <div class="line">พึ่งพาผูกติดสัญญากับคลาสปลายทางตัวใดตัวหนึ่ง</div>
     </div>
 
     <div class="q">
         <p>4) Notifier เก็บ channels เป็น <code>-iterable channels</code> การรองรับหลายช่องทางพร้อมกันดีกว่าการรับช่องเดียวอย่างไร และสอดคล้องกับหลักการใด <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">ช่วยเพิ่มอิสระในการกระจายข่าวสารออกไปหาผู้รับผ่านระบบสื่อสารได้หลายช่องทางพร้อมกัน</div>
+        <div class="line">หลักการที่สอดคล้อง Composition ร่วมกับหลักการ Polymorphism</div>
     </div>
 
     <div class="q">
         <p>5) ลูกศร “Validation” ชี้ไปยัง InvalidArgumentException หมายถึงการตรวจสอบใด และเกิดขึ้นเมื่อใด <span class="pts">1 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">หมายถึงการตรวจสอบความพร้อมของเนื้อหาข้อความแจังเตือน เกิดขึ้นเมื่อโค้ดส่วนนอกส่งค่าเนื้อความที่เป็นสตริงว่างเปล่าเข้ามาในระบบ</div>
     </div>
 
     <div class="q">
         <p>6) เหตุใด Notifier จึงห้ามตรวจสอบชนิดของ Channel ด้วย instanceof <span class="pts">1 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">เพราะจะทำให้ละเมิดหลักการ Polymorphism และทำให้เกิดจุดผูกแน่นแน่นหนา</div>
     </div>
 
     <h2>ส่วนที่ 2: วิเคราะห์โค้ด (10 คะแนน)</h2>
@@ -372,26 +376,26 @@ try {
 
     <div class="q">
         <p>1) โค้ดบรรทัดใดแสดงให้เห็นว่า Notifier ไม่ผูกติดกับ concrete channel จงอธิบาย <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">foreach ($this->channels as $channel) { $channel->send($recipient, $message); }</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>2) เมื่อเรียก notify ใน Test case 1 ผลลัพธ์ที่แสดงบนหน้าจอคืออะไรบ้าง <span class="pts">3 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">[Email] ถึง: student@example.ac.th | ข้อความ: มีการบ้าน PHP กำหนดส่งวันศุกร์นี้</div>
+        <div class="line">[SMS] ถึง: student@example.ac.th | ข้อความ: มีการบ้าน PHP กำหนดส่งวันศุกร์นี้</div>
     </div>
 
     <div class="q">
         <p>3) การเรียก notify ด้วยข้อความ <code>'   '</code> จะเกิดอะไรขึ้น และเหตุใดจึงใช้ trim() ในการตรวจสอบ <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">ระบบจะทำลายกระบวนการและเกิดการ Throw InvalidArgumentException เด้งข้อความแจ้งออกมา</div>
+        <div class="line">เหตุผลที่เลือก ตัดพื้นที่ว่างเปล่าหรือช่องว่างหน้าหลังที่แฝงติดเข้ามาออกไปก่อน ทำให้มั่นใจได้ว่าข้อความที่ส่งออกไปใช้งานนั้นจะมีเนื้อหาตัวอักษรจริงประกอบอยู่</div>
     </div>
 
     <div class="q">
         <p>4) หาก Notifier ใช้ <code>if ($channel instanceof EmailChannel)</code> เพื่อเลือกวิธีส่ง จะผิดหลักการใด และส่งผลเสียอย่างไร <span class="pts">3 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">ผิดหลักการ Open/Closed Principle (OCP) และทำลายหลักการ Polymorphism</div>
+        <div class="line">ผลเสีย คือ ทำให้คลาสหลักปิดกั้นตนเองต่อการต่อขยายขีดความสามารถ</div>
     </div>
 
     <h2>ส่วนที่ 3: เติมโค้ดในช่องว่าง (12 คะแนน)</h2>
@@ -441,21 +445,21 @@ final class Notifier
         <tbody>
             <tr>
                 <td>(1)</td>
-                <td class="fill"></td>
+                <td class="fill">send</td>
                 <td>(4)</td>
-                <td class="fill"></td>
+                <td class="fill">trim</td>
             </tr>
             <tr>
                 <td>(2)</td>
-                <td class="fill"></td>
+                <td class="fill">implements</td>
                 <td>(5)</td>
-                <td class="fill"></td>
+                <td class="fill">InvalidArgumentException</td>
             </tr>
             <tr>
                 <td>(3)</td>
-                <td class="fill"></td>
+                <td class="fill">iterable</td>
                 <td>(6)</td>
-                <td class="fill"></td>
+                <td class="fill">send</td>
             </tr>
         </tbody>
     </table>
@@ -476,39 +480,39 @@ final class Notifier
         <tbody>
             <tr>
                 <td>Notifier([EmailChannel]) แล้ว notify ข้อความปกติ</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">[Email] ถึง: ...</td>
+                <td class="fill">[Email] ถึง: ...</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>Notifier([EmailChannel, SmsChannel]) แล้ว notify ข้อความปกติ</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">แสดง [Email] และ [SMS]</td>
+                <td class="fill">แสดง [Email] และ [SMS]</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>notify ด้วยข้อความ '   '</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">Expected error: Message cannot be empty.</td>
+                <td class="fill">Expected error: Message cannot be empty.</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>notify ด้วยข้อความ ''</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">เกิดข้อผิดพลาด</td>
+                <td class="fill">Expected error: Message cannot be empty.</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>เพิ่ม LineChannel implements NotificationChannel แล้วใส่ใน Notifier</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">[Line] ถึง: ...</td>
+                <td class="fill">[Line] ถึง: ...</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>Notifier([]) แล้ว notify ข้อความปกติ</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">ทำงานผ่านได้ปกติโดยไม่มีผลลัพธ์การพิมพ์ใด ๆ แสดงบนหน้าจอ</td>
+                <td class="fill">ทำงานผ่านได้ปกติโดยไม่มีผลลัพธ์การพิมพ์ใด ๆ แสดงบนหน้าจอ</td>
+                <td class="fill">ผ่าน</td>
             </tr>
         </tbody>
     </table>
@@ -517,20 +521,20 @@ final class Notifier
 
     <div class="q">
         <p>1) ระบบนี้สอดคล้องกับ Open/Closed Principle อย่างไร จงยกตัวอย่างการเพิ่มช่องทางใหม่ <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">สอดคล้องเพราะระบบหลักปิดกั้นตัวเองจากการเข้าแก้ไขโค้ดโครงสร้างเดิม แต่เปิดอิสระต้อนรับแชนเนลรูปแบบใหม่ ๆ</div>
+        <div class="line">ตัวอย่าง หากต้องการสร้างระบบแจ้งเตือนเตือนภัยผ่าน DiscordChannel เราสามารถทำได้ทันทีโดยการประกาศคลาสใหม่มาต่อเชื่อมกับอินเทอร์เฟซ โดยไม่ต้องเปิดไฟล์แก้โค้ดระบบเดิม</div>
     </div>
 
     <div class="q">
         <p>2) “จุดที่เปลี่ยนแปลง” ในข้อนี้คืออะไร และการออกแบบนี้ปกป้อง Notifier ด้วย Protected Variations อย่างไร <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">รายชื่อและสถาปัตยกรรมของช่องทางการส่งแชนเนลต่าง ๆ โดยระบบทำการป้องกัน Notifier ผ่านรูปแบบแอบสแตรกชันตัวกลาง</div>
+        <div class="line">NotificationChannel คั่นไว้ ส่งผลให้ความแปรปรวนภายนอกไม่ส่งผลสะเทือนเข้ามาถึงแกนลูปการทำงานหลักด้านใน</div>
     </div>
 
     <div class="q">
         <p>3) การใช้ iterable ร่วมกับ foreach และเรียก send() ผ่าน interface ดีกว่าการตรวจชนิดของแต่ละ channel อย่างไร จงอธิบายด้วยแนวคิด Polymorphism <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">การใช้แนวคิด Polymorphism ช่วยให้โค้ดส่วนกลางมีความสะอาดและเรียบง่าย </div>
+        <div class="line">ช่วยตัดภาระการเขียนเงื่อนไขควบคุมที่ซับซ้อนออกไป ส่งผลให้โครงสร้างซอฟต์แวร์ยืดหยุ่นและดูแลรักษาง่ายขึ้น</div>
     </div>
 
     <h2>เกณฑ์การให้คะแนน</h2>

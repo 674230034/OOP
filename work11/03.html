@@ -105,6 +105,7 @@
             height: 2em;
             border-bottom: 1px solid #94a3b8;
             margin-bottom: 0.15rem;
+            color: red;
         }
 
         table {
@@ -194,6 +195,9 @@
             size: A4;
             margin: 14mm;
         }
+        .fill{
+            color: red;
+        }
     </style>
 </head>
 
@@ -208,9 +212,9 @@
     </p>
 
     <div class="meta">
-        <div>ชื่อ-นามสกุล: </div>
-        <div>รหัสนักศึกษา: </div>
-        <div>ชั้นปี/ห้อง: </div>
+        <div>ชื่อ-นามสกุล: น.ส.ปภัสสร แย้มชื่น</div>
+        <div>รหัสนักศึกษา: 674230034</div>
+        <div>ชั้นปี/ห้อง: 67/44</div>
         <div>คะแนน: /50</div>
     </div>
 
@@ -268,35 +272,36 @@ classDiagram
 
     <div class="q">
         <p>1) «interface» Shape ที่มีเมธอด <code>+area() : float</code> ทำหน้าที่อะไรในระบบ <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">ทำหน้าที่เป็นข้อกำหนดหรือสัญญาร่วม</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>2) ลูกศรหัวสามเหลี่ยมโปร่งจาก Circle และ Rectangle ชี้ไปยัง Shape หมายถึงความสัมพันธ์แบบใดใน UML <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">หมายถึงความสัมพันธ์แบบ Realization / Implementation (การนำอินเตอร์เฟซไปใช้งานจริง)</div>
     </div>
 
     <div class="q">
         <p>3) ป้ายกำกับ “OCP / LSP” บนลูกศร หมายถึงหลักการใด จงอธิบายแต่ละหลักการโดยย่อ <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">OCP โค้ดควรเปิดรับการขยาย เช่น เพิ่มรูปทรงใหม่ แต่ปิดปรับปรุงแก้ไขโค้ดเดิม</div>
+        <div class="line">LSP คลาสลูก (Circle, Rectangle) ต้องสามารถทดแทนคลาสแม่ (Shape) ได้อย่างสมบูรณ์โดยไม่ทำให้ระบบทำงานผิดพลาด</div>
     </div>
 
     <div class="q">
         <p>4) เหตุใดโค้ดหลักจึงไม่ต้องใช้ if หรือ instanceof ตรวจสอบชนิดของคลาส <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">เพราะระบบใช้หลักการ Polymorphism ทุกคลาสสืบทอดอินเตอร์เฟซเดียวกัน โค้ดหลักจึงสั่งคำสั่งเดียววัตถุจะเลือกทำงานตาม</div>
+        <div class="line">ชนิดของตัวเองโดยอัตโนมัติ</div>
     </div>
 
     <div class="q">
         <p>5) property <code>radius</code>, <code>width</code>, <code>height</code> เป็น private readonly เพื่อประโยชน์ใด <span class="pts">1 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">Private ทำ Encapsulation ซ่อนข้อมูลภายใน ไม่ให้แก้ไขตรง ๆ Readonly สร้างคุณสมบัติ Immutability ให้ค่าคงที่หลังจากถูก</div>
+        <div class="line">กำหนดใน Constructor</div>
     </div>
 
     <div class="q">
         <p>6) หากต้องการเพิ่มรูปทรง Triangle ในอนาคต โค้ดส่วนใดต้องแก้ไขบ้าง <span class="pts">1 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">เขียนคลาสใหม่ class Triangle implements Shape</div>
     </div>
 
     <h2>ส่วนที่ 2: วิเคราะห์โค้ด (10 คะแนน)</h2>
@@ -358,26 +363,27 @@ echo sprintf('พื้นที่สื่อประชาสัมพัน
 
     <div class="q">
         <p>1) บรรทัดใดในโค้ดหลักที่แสดง Polymorphism จงอธิบายการทำงาน <span class="pts">3 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">static fn (Shape $shape): float => $shape->area(),</div>
+        <div class="line">ฟังก์ชันรับพารามิเตอร์เป็นชนิด Shape (Interface) แล้วเรียกเมธอด area() โดยที่ระบบจะเรียกคำนวณพื้นที่ Circle หรือ Rectangle</div>
     </div>
 
     <div class="q">
         <p>2) จงคำนวณพื้นที่ของ Circle รัศมี 0.10 และ Rectangle ขนาด 1.20 × 0.80 แล้วหาพื้นที่รวม (แสดงวิธีทำ) <span class="pts">3 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">1. พื้นที่วงกลม เอาค่าพายคูณรัศมียกกำลังสอง (3.14159  * 0.10^2\) ได้ประมาณ 0.0314 ตารางเมตร</div>
+        <div class="line">2.พื้นที่สี่เหลี่ยม: เอาความกว้างคูณความยาว (1.20 * 0.80\) ได้ 0.9600 ตารางเมตร</div>
+        <div class="line">3.พื้นที่รวม: นำ 0.0314 + 0.9600 ก็จะได้พื้นที่รวมทั้งหมด 0.9914 ตารางเมตร</div>
     </div>
 
     <div class="q">
         <p>3) การเรียก <code>new Circle(-5)</code> จะเกิดอะไรขึ้น และเหตุใดจึงต้องตรวจสอบค่าใน constructor <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">จะโยนข้อผิดพลาดคลาส InvalidArgumentException ออกมา ต้องตรวจสอบเพื่อป้องกันการใส่ข้อมูลที่ไม่มีจริงตามหลักคณิต</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>4) หากลบ <code>implements Shape</code> ออกจาก Circle จะเกิดผลใดกับโค้ดหลัก เพราะเหตุใด <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">เกิดข้อผิดพลาดระดับ Fatal Error / Type Error ในขั้นตอนการทำงาน เพราะอาร์เรย์ $promotionMedia จะมีวัตถุที่ไม่ใช่ชนิด</div>
+        <div class="line">Shape ปะปนอยู่ ทำให้ฟังก์ชัน static fn (Shape $shape) ปฏิเสธการทำงาน</div>
     </div>
 
     <h2>ส่วนที่ 3: เติมโค้ดในช่องว่าง (12 คะแนน)</h2>
@@ -431,21 +437,21 @@ $total = (6)________________(array_map(
         <tbody>
             <tr>
                 <td>(1)</td>
-                <td class="fill"></td>
+                <td class="fill">area</td>
                 <td>(4)</td>
-                <td class="fill"></td>
+                <td class="fill">*</td>
             </tr>
             <tr>
                 <td>(2)</td>
-                <td class="fill"></td>
+                <td class="fill">implements</td>
                 <td>(5)</td>
-                <td class="fill"></td>
+                <td class="fill">Shape</td>
             </tr>
             <tr>
                 <td>(3)</td>
-                <td class="fill"></td>
+                <td class="fill">2</td>
                 <td>(6)</td>
-                <td class="fill"></td>
+                <td class="fill">array_sum</td>
             </tr>
         </tbody>
     </table>
@@ -466,39 +472,39 @@ $total = (6)________________(array_map(
         <tbody>
             <tr>
                 <td>(new Circle(2))-&gt;area()</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">ประมาณ 12.57</td>
+                <td class="fill">ได้ค่าพื้นที่ประมาณ 12.57</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>(new Rectangle(3, 4))-&gt;area()</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">ได้ 12</td>
+                <td class="fill">ได้ค่าพื้นที่เท่ากับ 12.00</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>new Circle(-5)</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">เกิดข้อผิดพลาด</td>
+                <td class="fill">เกิดข้อผิดพลาด: InvalidArgumentException: Radius cannot be negative.</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>new Rectangle(3, -4)</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">เกิดข้อผิดพลาด</td>
+                <td class="fill">เกิดข้อผิดพลาด: InvalidArgumentException: Width and height cannot be negative.</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>ผลรวม [new Circle(0.10), new Rectangle(1.20, 0.80)]</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">พื้นที่สื่อประชาสัมพันธ์รวม: 0.99 ตารางเมตร</td>
+                <td class="fill">พื้นที่สื่อประชาสัมพันธ์รวม: 0.99 ตารางเมตร</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>(new Rectangle(0, 5))-&gt;area()</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">ได้ค่าพื้นที่เท่ากับ 0</td>
+                <td class="fill">ได้ค่าพื้นที่เท่ากับ 0.00</td>
+                <td class="fill">ผ่าน</td>
             </tr>
         </tbody>
     </table>
@@ -507,19 +513,19 @@ $total = (6)________________(array_map(
 
     <div class="q">
         <p>1) ระบบนี้สอดคล้องกับ Open/Closed Principle อย่างไร หากเพิ่ม Triangle โค้ดหลักต้องแก้ไขหรือไม่ <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">ถ้าเพิ่ม Triangle โค้ดหลักไม่ต้องแก้ไข เพราะมันคุยผ่านอินเตอร์เฟซ Shape เรียบร้อยแล้ว</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>2) Circle และ Rectangle สอดคล้องกับ Liskov Substitution Principle อย่างไร <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">เพราะทั้งสองคลาสทำตามสัญญาของ Shape อย่างถูกต้องสามารถส่งวัตถุแทนที่ไทป์ Shape ได้อย่างกลมกลืนโดยไม่ทำให้</div>
+        <div class="line">พฤติกรรมของโปรแกรมหลักพังลง</div>
     </div>
 
     <div class="q">
         <p>3) Dependency Inversion Principle ปรากฏในโค้ดหลักจุดใด จงอธิบาย <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">โค้ดส่วนคำนวณพื้นที่รวมเลือกที่จะพึ่งพา Abstraction แทนที่จะพึ่งพาวัตถุตัวจริงเชิงเทคนิคตัวใดตัวหนึ่ง</div>
         <div class="line"></div>
     </div>
 

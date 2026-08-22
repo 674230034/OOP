@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="th">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -105,6 +106,7 @@
             height: 2em;
             border-bottom: 1px solid #94a3b8;
             margin-bottom: 0.15rem;
+            color: red;
         }
 
         table {
@@ -114,7 +116,8 @@
             margin: 0.75rem 0;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #94a3b8;
             padding: 0.5rem 0.6rem;
             vertical-align: top;
@@ -185,7 +188,8 @@
                 page-break-before: always;
             }
 
-            pre.mermaid, pre.code {
+            pre.mermaid,
+            pre.code {
                 break-inside: avoid;
             }
         }
@@ -194,46 +198,49 @@
             size: A4;
             margin: 14mm;
         }
+        .fill{
+            color: red;
+        }
     </style>
 </head>
 
 <body>
-<div class="sheet">
+    <div class="sheet">
 
-    <h1>ใบงานปฏิบัติการที่ 6</h1>
-    <p style="margin:0;">
-        เรื่อง Value Object สำหรับอีเมลนักศึกษา (Email Value Object)
-        (บริบท: ระบบบัญชีนักศึกษาต้องการตรวจสอบอีเมลก่อนสมัครหรือยืนยันตัวตน)<br />
-        รายวิชา การเขียนโปรแกรมเชิงวัตถุ (PHP 8.4+)
-    </p>
+        <h1>ใบงานปฏิบัติการที่ 6</h1>
+        <p style="margin:0;">
+            เรื่อง Value Object สำหรับอีเมลนักศึกษา (Email Value Object)
+            (บริบท: ระบบบัญชีนักศึกษาต้องการตรวจสอบอีเมลก่อนสมัครหรือยืนยันตัวตน)<br />
+            รายวิชา การเขียนโปรแกรมเชิงวัตถุ (PHP 8.4+)
+        </p>
 
-    <div class="meta">
-        <div>ชื่อ-นามสกุล: </div>
-        <div>รหัสนักศึกษา: </div>
-        <div>ชั้นปี/ห้อง: </div>
-        <div>คะแนน: /50</div>
-    </div>
+        <div class="meta">
+            <div>ชื่อ-นามสกุล: น.ส.ปภัสสร แย้มชื่น</div>
+            <div>รหัสนักศึกษา: 674230034</div>
+            <div>ชั้นปี/ห้อง: 67/44</div>
+            <div>คะแนน: /50</div>
+        </div>
 
-    <p><strong>คำชี้แจง:</strong> ให้นักศึกษาศึกษา Class Diagram ด้านล่าง แล้วทำกิจกรรมทุกส่วนให้ครบถ้วน</p>
+        <p><strong>คำชี้แจง:</strong> ให้นักศึกษาศึกษา Class Diagram ด้านล่าง แล้วทำกิจกรรมทุกส่วนให้ครบถ้วน</p>
 
-    <p><strong>จุดประสงค์การเรียนรู้:</strong></p>
-    <ul class="objectives">
-        <li>อธิบายความแตกต่างของ Value Object กับ Entity ได้</li>
-        <li>ใช้ Static Factory บังคับการตรวจสอบค่าก่อนสร้างวัตถุได้</li>
-        <li>อธิบายความสำคัญของ Immutability ต่อ Value Object ได้</li>
-        <li>ทดสอบการ normalize, การเปรียบเทียบค่า และกรณีผิดพลาดได้ถูกต้อง</li>
-    </ul>
+        <p><strong>จุดประสงค์การเรียนรู้:</strong></p>
+        <ul class="objectives">
+            <li>อธิบายความแตกต่างของ Value Object กับ Entity ได้</li>
+            <li>ใช้ Static Factory บังคับการตรวจสอบค่าก่อนสร้างวัตถุได้</li>
+            <li>อธิบายความสำคัญของ Immutability ต่อ Value Object ได้</li>
+            <li>ทดสอบการ normalize, การเปรียบเทียบค่า และกรณีผิดพลาดได้ถูกต้อง</li>
+        </ul>
 
-    <h2>แผนภาพอ้างอิง</h2>
+        <h2>แผนภาพอ้างอิง</h2>
 
-    <div class="badge-row">
-        <span class="badge">Value Object</span>
-        <span class="badge">Immutability</span>
-        <span class="badge">SRP</span>
-        <span class="badge">Validation</span>
-    </div>
+        <div class="badge-row">
+            <span class="badge">Value Object</span>
+            <span class="badge">Immutability</span>
+            <span class="badge">SRP</span>
+            <span class="badge">Validation</span>
+        </div>
 
-    <pre class="mermaid">
+        <pre class="mermaid">
 classDiagram
     class Email {
         &lt;&lt;ValueObject&gt;&gt;
@@ -252,52 +259,58 @@ classDiagram
     Email --> InvalidArgumentException : Validation
     </pre>
 
-    <div class="note">
-        Value Object ช่วยให้การ validate และความหมายของอีเมลอยู่ในที่เดียว
-        ลดการกระจายกฎตรวจสอบตาม Service หรือ Controller
-    </div>
+        <div class="note">
+            Value Object ช่วยให้การ validate และความหมายของอีเมลอยู่ในที่เดียว
+            ลดการกระจายกฎตรวจสอบตาม Service หรือ Controller
+        </div>
 
-    <h2>ส่วนที่ 1: อ่านแผนภาพแล้วตอบคำถาม (10 คะแนน)</h2>
+        <h2>ส่วนที่ 1: อ่านแผนภาพแล้วตอบคำถาม (10 คะแนน)</h2>
 
-    <div class="q">
-        <p>1) «ValueObject» ที่กำกับคลาส Email หมายความว่าอย่างไร และแตกต่างจาก Entity อย่างไร <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
-    </div>
+        <div class="q">
+            <p>1) «ValueObject» ที่กำกับคลาส Email หมายความว่าอย่างไร และแตกต่างจาก Entity อย่างไร <span class="pts">2
+                    คะแนน</span></p>
+            <div class="line">หมายถึงวัตถุที่ใช้เป็นตัวแทนของค่า (Value) ไม่มี Identity ประจำตัว</div>
+            <div class="line"></div>
+        </div>
 
-    <div class="q">
-        <p>2) เหตุใด constructor <code>-__construct(value)</code> จึงเป็น private และบังคับสร้างผ่าน <code>+fromString(value)</code> รูปแบบนี้นเรียกว่าอะไร <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
-    </div>
+        <div class="q">
+            <p>2) เหตุใด constructor <code>-__construct(value)</code> จึงเป็น private และบังคับสร้างผ่าน
+                <code>+fromString(value)</code> รูปแบบนี้นเรียกว่าอะไร <span class="pts">2 คะแนน</span></p>
+            <div class="line">เพื่อควบคุมและรับประกันว่าออบเจกต์ Email ทุกตัวที่ถูกสร้างขึ้นจะต้องผ่านการตรวจสอบความถูกต้อง (Validation) เสมอ</div>
+            <div class="line"></div>
+        </div>
 
-    <div class="q">
-        <p>3) “Immutability” หมายความว่าอย่างไร และใน PHP 8.4 ใช้ keyword ใดทำให้ Email เปลี่ยนแปลงไม่ได้ <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
-    </div>
+        <div class="q">
+            <p>3) “Immutability” หมายความว่าอย่างไร และใน PHP 8.4 ใช้ keyword ใดทำให้ Email เปลี่ยนแปลงไม่ได้ <span
+                    class="pts">2 คะแนน</span></p>
+            <div class="line">คือสภาวะที่วัตถุไม่สามารถถูกแก้ไขหรือเปลี่ยนแปลงค่าสถานะภายในได้หลังจากที่ถูกสร้างขึ้นมาแล้ว</div>
+            <div class="line"></div>
+        </div>
 
-    <div class="q">
-        <p>4) ลูกศร “Validation” ชี้ไปยัง InvalidArgumentException หมายถึงพฤติกรรมใด และเกิดขึ้นเมื่อใด <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
-    </div>
+        <div class="q">
+            <p>4) ลูกศร “Validation” ชี้ไปยัง InvalidArgumentException หมายถึงพฤติกรรมใด และเกิดขึ้นเมื่อใด <span
+                    class="pts">2 คะแนน</span></p>
+            <div class="line">หมายถึงการพ่นข้อผิดพลาด (Throw Exception) ออกมาเพื่อปฏิเสธการสร้างวัตถุ</div>
+            <div class="line"></div>
+        </div>
 
-    <div class="q">
-        <p>5) เหตุใดเมธอด equals(other) จึงเปรียบเทียบด้วย “ค่า” แทนการเปรียบเทียบ identity ของ object <span class="pts">1 คะแนน</span></p>
-        <div class="line"></div>
-    </div>
+        <div class="q">
+            <p>5) เหตุใดเมธอด equals(other) จึงเปรียบเทียบด้วย “ค่า” แทนการเปรียบเทียบ identity ของ object <span
+                    class="pts">1 คะแนน</span></p>
+            <div class="line">เพราะตามนิยามหลักของ Value Object วัตถุสองชิ้นจะถือเป็นสิ่งเดียวกันก็ต่อเมื่อแอตทริบิวต์หรือค่าภายในมีค่าเท่ากันทุกประการ</div>
+        </div>
 
-    <div class="q">
-        <p>6) เมธอด <code>+__toString()</code> มีประโยชน์อย่างไรต่อการใช้งานจริง <span class="pts">1 คะแนน</span></p>
-        <div class="line"></div>
-    </div>
+        <div class="q">
+            <p>6) เมธอด <code>+__toString()</code> มีประโยชน์อย่างไรต่อการใช้งานจริง <span class="pts">1 คะแนน</span>
+            </p>
+            <div class="line">ช่วยให้ออบเจกต์ Email สามารถถูกเปลี่ยนเป็นสตริง (String) ได้โดยอัตโนมัติเมื่อนำไปใช้งานในบริบทข้อความ</div>
+        </div>
 
-    <h2>ส่วนที่ 2: วิเคราะห์โค้ด (10 คะแนน)</h2>
+        <h2>ส่วนที่ 2: วิเคราะห์โค้ด (10 คะแนน)</h2>
 
-    <p>พิจารณาโค้ดต่อไปนี้ แล้วตอบคำถาม</p>
+        <p>พิจารณาโค้ดต่อไปนี้ แล้วตอบคำถาม</p>
 
-<pre class="code">
+        <pre class="code">
 &lt;?php declare(strict_types=1);
 
 final readonly class Email implements Stringable
@@ -338,35 +351,39 @@ $anotherEmail = Email::fromString('student@example.ac.th');
 var_dump($studentEmail-&gt;equals($anotherEmail));
 </pre>
 
-    <div class="q">
-        <p>1) ผลลัพธ์ของ <code>Email::fromString('Student@Example.ac.th ')</code> คืออะไร จงอธิบายการทำงานทีละขั้นตอน <span class="pts">3 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
-    </div>
+        <div class="q">
+            <p>1) ผลลัพธ์ของ <code>Email::fromString('Student@Example.ac.th ')</code> คืออะไร
+                จงอธิบายการทำงานทีละขั้นตอน <span class="pts">3 คะแนน</span></p>
+            <div class="line">ได้ออบเจกต์ Email ที่เก็บค่าพารามิเตอร์ภายในเป็น 'student@example.ac.th'</div>
+            <div class="line"></div>
+        </div>
 
-    <div class="q">
-        <p>2) การเรียก <code>Email::fromString('student@invalid')</code> จะเกิดอะไรขึ้น เพราะเหตุใด <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
-    </div>
+        <div class="q">
+            <p>2) การเรียก <code>Email::fromString('student@invalid')</code> จะเกิดอะไรขึ้น เพราะเหตุใด <span
+                    class="pts">2 คะแนน</span></p>
+            <div class="line">เกิดข้อผิดพลาดพ่น InvalidArgumentException: Invalid email address. ออกมาและระบบจะหยุดทำงาน</div>
+            <div class="line"></div>
+        </div>
 
-    <div class="q">
-        <p>3) เหตุใด <code>$studentEmail-&gt;equals($anotherEmail)</code> จึงคืนค่า true ทั้งที่ข้อความต้นทางต่างกัน <span class="pts">3 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
-    </div>
+        <div class="q">
+            <p>3) เหตุใด <code>$studentEmail-&gt;equals($anotherEmail)</code> จึงคืนค่า true ทั้งที่ข้อความต้นทางต่างกัน
+                <span class="pts">3 คะแนน</span></p>
+            <div class="line">คืนค่าเป็น true</div>
+            <div class="line"></div>
+        </div>
 
-    <div class="q">
-        <p>4) หากตัด keyword <code>readonly</code> ออก จะเกิดความเสี่ยงใดต่อ Value Object <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
-    </div>
+        <div class="q">
+            <p>4) หากตัด keyword <code>readonly</code> ออก จะเกิดความเสี่ยงใดต่อ Value Object <span class="pts">2
+                    คะแนน</span></p>
+            <div class="line">วัตถุจะสูญเสียคุณสมบัติ Immutability เปิดโอกาสให้โค้ดภายนอกแอบเข้ามาเขียนทับหรือแก้ไขสถานะอีเมลได้โดยตรง</div>
+            <div class="line"></div>
+        </div>
 
-    <h2>ส่วนที่ 3: เติมโค้ดในช่องว่าง (12 คะแนน)</h2>
+        <h2>ส่วนที่ 3: เติมโค้ดในช่องว่าง (12 คะแนน)</h2>
 
-    <p>เติมคำในช่องว่าง (1)–(6) ให้โค้ดสมบูรณ์ตรงตามข้อกำหนด (ช่องละ 2 คะแนน)</p>
+        <p>เติมคำในช่องว่าง (1)–(6) ให้โค้ดสมบูรณ์ตรงตามข้อกำหนด (ช่องละ 2 คะแนน)</p>
 
-<pre class="code">
+        <pre class="code">
 final (1)________________ class Email implements Stringable
 {
     (2)________________ function __construct(public string $value) {}
@@ -389,139 +406,166 @@ final (1)________________ class Email implements Stringable
 }
 </pre>
 
-    <table>
-        <thead>
-            <tr>
-                <th>ช่องที่</th>
-                <th>คำตอบ</th>
-                <th>ช่องที่</th>
-                <th>คำตอบ</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>(1)</td>
-                <td class="fill"></td>
-                <td>(4)</td>
-                <td class="fill"></td>
-            </tr>
-            <tr>
-                <td>(2)</td>
-                <td class="fill"></td>
-                <td>(5)</td>
-                <td class="fill"></td>
-            </tr>
-            <tr>
-                <td>(3)</td>
-                <td class="fill"></td>
-                <td>(6)</td>
-                <td class="fill"></td>
-            </tr>
-        </tbody>
-    </table>
+        <table>
+            <thead>
+                <tr>
+                    <th>ช่องที่</th>
+                    <th>คำตอบ</th>
+                    <th>ช่องที่</th>
+                    <th>คำตอบ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>(1)</td>
+                    <td class="fill">readonly</td>
+                    <td>(4)</td>
+                    <td class="fill">strtolower</td>
+                </tr>
+                <tr>
+                    <td>(2)</td>
+                    <td class="fill">private</td>
+                    <td>(5)</td>
+                    <td class="fill">filter_var</td>
+                </tr>
+                <tr>
+                    <td>(3)</td>
+                    <td class="fill">static</td>
+                    <td>(6)</td>
+                    <td class="fill">self</td>
+                </tr>
+            </tbody>
+        </table>
 
-    <h2>ส่วนที่ 4: ทดสอบและบันทึกผล (12 คะแนน)</h2>
+        <h2>ส่วนที่ 4: ทดสอบและบันทึกผล (12 คะแนน)</h2>
 
-    <p>รันโค้ดแล้วบันทึกผลแต่ละกรณี (กรณีละ 2 คะแนน)</p>
+        <p>รันโค้ดแล้วบันทึกผลแต่ละกรณี (กรณีละ 2 คะแนน)</p>
 
-    <table>
-        <thead>
-            <tr>
-                <th style="width:42%;">Test Case</th>
-                <th>ผลลัพธ์ที่คาดหวัง</th>
-                <th>ผลลัพธ์จริง</th>
-                <th style="width:10%;">ผ่าน?</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Email::fromString('Student@Example.ac.th ') แล้ว toString()</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-            </tr>
-            <tr>
-                <td>Email::fromString('invalid-email')</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-            </tr>
-            <tr>
-                <td>equals ระหว่าง ' a@b.co ' กับ 'A@B.CO'</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-            </tr>
-            <tr>
-                <td>Email::fromString('')</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-            </tr>
-            <tr>
-                <td>echo $email; (ใช้ __toString โดยอ้อม)</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-            </tr>
-            <tr>
-                <td>$email-&gt;value = 'x@y.z'; (พยายามแก้ไขค่า)</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-            </tr>
-        </tbody>
-    </table>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:42%;">Test Case</th>
+                    <th>ผลลัพธ์ที่คาดหวัง</th>
+                    <th>ผลลัพธ์จริง</th>
+                    <th style="width:10%;">ผ่าน?</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Email::fromString('Student@Example.ac.th ') แล้ว toString()</td>
+                    <td class="fill">student@example.ac.th</td>
+                    <td class="fill">student@example.ac.th</td>
+                    <td class="fill">ผ่าน</td>
+                </tr>
+                <tr>
+                    <td>Email::fromString('invalid-email')</td>
+                    <td class="fill">InvalidArgumentException: Invalid email address.</td>
+                    <td class="fill">InvalidArgumentException: Invalid email address.</td>
+                    <td class="fill">ผ่าน</td>
+                </tr>
+                <tr>
+                    <td>equals ระหว่าง ' a@b.co ' กับ 'A@B.CO'</td>
+                    <td class="fill">bool(true)</td>
+                    <td class="fill">bool(true)</td>
+                    <td class="fill">ผ่าน</td>
+                </tr>
+                <tr>
+                    <td>Email::fromString('')</td>
+                    <td class="fill">InvalidArgumentException: Invalid email address.</td>
+                    <td class="fill">InvalidArgumentException: Invalid email address.</td>
+                    <td class="fill">ผ่าน</td>
+                </tr>
+                <tr>
+                    <td>echo $email; (ใช้ __toString โดยอ้อม)</td>
+                    <td class="fill">student@example.ac.th</td>
+                    <td class="fill">student@example.ac.th</td>
+                    <td class="fill">ผ่าน</td>
+                </tr>
+                <tr>
+                    <td>$email-&gt;value = 'x@y.z'; (พยายามแก้ไขค่า)</td>
+                    <td class="fill">เกิดข้อผิดพลาด</td>
+                    <td class="fill">Error: Cannot modify readonly property</td>
+                    <td class="fill">ผ่าน</td>
+                </tr>
+            </tbody>
+        </table>
 
-    <h2>ส่วนที่ 5: สะท้อนคิดเชิงออกแบบ OOAD (6 คะแนน)</h2>
+        <h2>ส่วนที่ 5: สะท้อนคิดเชิงออกแบบ OOAD (6 คะแนน)</h2>
 
-    <div class="q">
-        <p>1) Email Value Object ช่วยลดการเขียนกฎตรวจสอบซ้ำซ้อน (DRY) ในระบบได้อย่างไร <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="q">
+            <p>1) Email Value Object ช่วยลดการเขียนกฎตรวจสอบซ้ำซ้อน (DRY) ในระบบได้อย่างไร <span class="pts">2
+                    คะแนน</span></p>
+            <div class="line">ย้ายกฎการ Validate ทั้งหมดมาเก็บบรรจุไว้ที่ตัวคลาส Email เพียงที่เดียว</div>
+            <div class="line"></div>
+        </div>
+
+        <div class="q">
+            <p>2) เหตุใด Immutability จึงสำคัญต่อ Value Object จงยกตัวอย่างปัญหาหากค่าถูกแก้ไขได้หลังสร้าง <span
+                    class="pts">2 คะแนน</span></p>
+            <div class="line">ช่วยให้เกิดความน่าเชื่อถือและความปลอดภัยในการส่งต่อวัตถุไปใช้งานทั่วทั้งระบบ</div>
+            <div class="line"></div>
+        </div>
+
+        <div class="q">
+            <p>3) Email สามารถนำไปใช้ร่วมกับ Use Case อื่น (เช่น RegisterUserService ข้อ 10) ได้อย่างไร และดีอย่างไร
+                <span class="pts">2 คะแนน</span></p>
+            <div class="line">นำไปใช้เป็น Type Hint ในพารามิเตอร์ของระบบอื่น ๆ ได้</div>
+            <div class="line"></div>
+        </div>
+
+        <h2>เกณฑ์การให้คะแนน</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ส่วนที่</th>
+                    <th>เนื้อหา</th>
+                    <th>คะแนน</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>อ่านแผนภาพแล้วตอบคำถาม</td>
+                    <td>10</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>วิเคราะห์โค้ด</td>
+                    <td>10</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>เติมโค้ดในช่องว่าง</td>
+                    <td>12</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>ทดสอบและบันทึกผล</td>
+                    <td>12</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>สะท้อนคิดเชิงออกแบบ</td>
+                    <td>6</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><strong>รวม</strong></td>
+                    <td><strong>50</strong></td>
+                </tr>
+            </tbody>
+        </table>
+
+
     </div>
 
-    <div class="q">
-        <p>2) เหตุใด Immutability จึงสำคัญต่อ Value Object จงยกตัวอย่างปัญหาหากค่าถูกแก้ไขได้หลังสร้าง <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
-    </div>
-
-    <div class="q">
-        <p>3) Email สามารถนำไปใช้ร่วมกับ Use Case อื่น (เช่น RegisterUserService ข้อ 10) ได้อย่างไร และดีอย่างไร <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
-    </div>
-
-    <h2>เกณฑ์การให้คะแนน</h2>
-
-    <table>
-        <thead>
-            <tr>
-                <th>ส่วนที่</th>
-                <th>เนื้อหา</th>
-                <th>คะแนน</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr><td>1</td><td>อ่านแผนภาพแล้วตอบคำถาม</td><td>10</td></tr>
-            <tr><td>2</td><td>วิเคราะห์โค้ด</td><td>10</td></tr>
-            <tr><td>3</td><td>เติมโค้ดในช่องว่าง</td><td>12</td></tr>
-            <tr><td>4</td><td>ทดสอบและบันทึกผล</td><td>12</td></tr>
-            <tr><td>5</td><td>สะท้อนคิดเชิงออกแบบ</td><td>6</td></tr>
-            <tr><td colspan="2"><strong>รวม</strong></td><td><strong>50</strong></td></tr>
-        </tbody>
-    </table>
-
-
-</div>
-
-<script>
-    mermaid.initialize({
-        startOnLoad: true,
-        theme: 'default',
-        securityLevel: 'loose'
-    });
-</script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose'
+        });
+    </script>
 </body>
+
 </html>

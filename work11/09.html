@@ -105,6 +105,7 @@
             height: 2em;
             border-bottom: 1px solid #94a3b8;
             margin-bottom: 0.15rem;
+            color: red;
         }
 
         table {
@@ -194,6 +195,9 @@
             size: A4;
             margin: 14mm;
         }
+        .fill{
+            color: red;
+        }
     </style>
 </head>
 
@@ -208,9 +212,9 @@
     </p>
 
     <div class="meta">
-        <div>ชื่อ-นามสกุล: </div>
-        <div>รหัสนักศึกษา: </div>
-        <div>ชั้นปี/ห้อง: </div>
+        <div>ชื่อ-นามสกุล: น.ส.ปภัสสร แย้มชื่น</div>
+        <div>รหัสนักศึกษา: 674230034</div>
+        <div>ชั้นปี/ห้อง: 67/44</div>
         <div>คะแนน: /50</div>
     </div>
 
@@ -268,36 +272,37 @@ classDiagram
 
     <div class="q">
         <p>1) «trait» คืออะไร แตกต่างจาก class และ interface อย่างไร <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">Trait คือโครงสร้างกลไกที่ช่วยเพิ่มความสามารถในการนำกลุ่มชุดโค้ดของเมธอดกลับมาใช้งานซ้ำในคลาสต่าง ๆ ได้โดยอิสระ</div>
+        <div class="line">Trait ไม่สามารถนำมาสร้างออบเจกต์ได้เองเหมือน Class และไม่ได้มีหน้าที่ไว้ใช้ระบุข้อตกลงบังคับแบบไม่มีเนื้อโค้ดข้างในเหมือน Interface</div>
     </div>
 
     <div class="q">
         <p>2) หากคลาส Document ใช้ Timestampable และ Auditable โดยไม่ระบุกฎแก้ conflict จะเกิดอะไรขึ้น <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">เกิดข้อผิดพลาดในระดับคอมไพล์ไทม์ Fatal Error เนื่องจากระบบสับสนและไม่สามารถตัดสินใจเลือกได้ว่าจะนำเอาเมธอดชื่อ </div>
+        <div class="line">timestamp() ตัวไหนจากสองแหล่งมาใช้งานในคลาส</div>
     </div>
 
     <div class="q">
         <p>3) คำสั่ง <code>Timestampable::timestamp insteadof Auditable</code> มีความหมายว่าอย่างไร <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">มีความหมายให้ระบบเลือกนำเอาเมธอดชื่อ timestamp() ที่ถูกเขียนอยู่ภายใน Trait Timestampable มาสวมบทบาทเป็น</div>
+        <div class="line">เมธอดหลักประจำคลาส Document แทนที่ตัวแปรชื่อเดียวกันจากคลาส Auditable</div>
     </div>
 
     <div class="q">
         <p>4) คำสั่ง <code>Auditable::timestamp as auditTimestamp</code> ทำหน้าที่อะไร และเหตุใดจึงจำเป็นในกรณีนี้ <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">ทำหน้าที่ทำการตั้งชื่อเล่นหรือนามแฝงใหม่ (Alias) ให้กับเมธอดเดิม</div>
+        <div class="line">เพื่อช่วยกู้คืนความสามารถในการเรียกใช้งานเมธอดเวอร์ชันของ Auditable กลับขึ้นมาใช้งานได้อยู่ โดยไม่โดนคำสั่ง insteadof</div>
     </div>
 
     <div class="q">
         <p>5) หลังแก้ conflict แล้ว Document มีเมธอดใดให้ใช้งานบ้าง จง liệt kê ตามแผนภาพ <span class="pts">1 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">createdAt(), timestamp(), auditMessage(), auditTimestamp(), และ auditLog()</div>
     </div>
 
     <div class="q">
         <p>6) การใช้ Trait ในข้อนี้สอดคล้องกับหลัก DRY และ Separation of Concerns อย่างไร <span class="pts">1 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">สอดคล้องกับ DRY เพราะเขียนระบบสแตมป์เวลาลงบันทึกเพียงรอบเดียวใน Trait แล้วนำไปสวมใส่ให้เอกสารคลาสอื่น ๆ ได้ทันที</div>
+        <div class="line">สอดคล้องกับ Separation of Concerns เพราะแยกแยะความรับผิดชอบเรื่องงานบันทึกเวลาและการทำระบบตรวจสอบ (Auditing) ออกจากลอจิกแกนธุรกิจหลักของตัวเอกสาร</div>
     </div>
 
     <h2>ส่วนที่ 2: วิเคราะห์โค้ด (10 คะแนน)</h2>
@@ -354,26 +359,26 @@ echo $doc-&gt;auditLog(), PHP_EOL;
 
     <div class="q">
         <p>1) การเรียก <code>$doc-&gt;createdAt()</code> ให้ผลลัพธ์ขึ้นต้นด้วยคำว่าอะไร เพราะใช้ timestamp() ของ Trait ใด <span class="pts">3 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">ขึ้นต้นด้วยคำว่า Created: เพราะระบบรันผ่านเมธอด timestamp() ซึ่งระบุค่าให้เจาะจงใช้งานตามข้อตกลงของ Trait Timestampable</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>2) การเรียก <code>$doc-&gt;auditTimestamp()</code> ให้ผลลัพธ์ขึ้นต้นด้วยคำว่าอะไร ทั้งที่ไม่ได้ประกาศเมธอดนี้ไว้ใน Document โดยตรง <span class="pts">3 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">ขึ้นต้นด้วยคำว่า Audited: ระบบทำการสืบเนื่องพฤติกรรมดึงโครงสร้างมาจาก Trait Auditable ผ่านคำสั่งจำแลงชื่อเล่นแฝงไว้ด้วยคำว่า as auditTimestamp</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>3) หากคงคำสั่ง <code>as</code> ไว้แต่ลบ <code>insteadof</code> ออก จะเกิดอะไรขึ้น เพราะเหตุใด <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">จะเกิดปัญหาพังทลายระดับ Fatal Error ระบบหยุดการทำงานทันที</div>
+        <div class="line">เนื่องจากชื่อดั้งเดิม timestamp() จากทั้งสองคลาสยังคงเกิดสภาวะชนกัน (Conflict) อยู่เหมือนเดิม</div>
     </div>
 
     <div class="q">
         <p>4) เหตุใดจึงไม่ควรใช้ Trait พร่ำเพรื่อจนพฤติกรรมของคลาสกระจัดกระจาย จงอธิบายด้วยหลัก Separation of Concerns <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">การใช้ Trait มากเกินพอดีจะนำไปสู่ปัญหาโค้ดสปาเก็ตตี้ที่ไร้โครงสร้างที่ชัดเจน คลาสหลักจะสูญเสียความสามารถในการควบคุม</div>
+        <div class="line">ขอบเขตหน้าที่ความรับผิดชอบของตนเอง และส่งผลเสียทำให้กระจัดกระจาย ยุ่งยากต่อการแกะรอย ค้นหาต้นตอจุดเกิดข้อผิดพลาด และทำให้ทีมพัฒนาสับสนเวลาเข้ามาดูแลรักษาโค้ด</div>
     </div>
 
     <h2>ส่วนที่ 3: เติมโค้ดในช่องว่าง (12 คะแนน)</h2>
@@ -420,21 +425,21 @@ final class Document
         <tbody>
             <tr>
                 <td>(1)</td>
-                <td class="fill"></td>
+                <td class="fill">trait</td>
                 <td>(4)</td>
-                <td class="fill"></td>
+                <td class="fill">as</td>
             </tr>
             <tr>
                 <td>(2)</td>
-                <td class="fill"></td>
+                <td class="fill">use</td>
                 <td>(5)</td>
-                <td class="fill"></td>
+                <td class="fill">timestamp</td>
             </tr>
             <tr>
                 <td>(3)</td>
-                <td class="fill"></td>
+                <td class="fill">insteadof</td>
                 <td>(6)</td>
-                <td class="fill"></td>
+                <td class="fill">auditTimestamp</td>
             </tr>
         </tbody>
     </table>
@@ -455,39 +460,39 @@ final class Document
         <tbody>
             <tr>
                 <td>$doc-&gt;createdAt()</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">Created: [วันเวลาปัจจุบันในรูปแบบ ISO-8601]</td>
+                <td class="fill">Created: [วันเวลาปัจจุบันในรูปแบบ ISO-8601]</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>$doc-&gt;timestamp()</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">Created: [วันเวลาปัจจุบันในรูปแบบ ISO-8601]</td>
+                <td class="fill">Created: [วันเวลาปัจจุบันในรูปแบบ ISO-8601]</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>$doc-&gt;auditTimestamp()</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">Audited: [วันเวลาปัจจุบันในรูปแบบ ISO-8601]</td>
+                <td class="fill">Audited: [วันเวลาปัจจุบันในรูปแบบ ISO-8601]</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>$doc-&gt;auditMessage()</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">Student document was audited.</td>
+                <td class="fill">Student document was audited.</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>$doc-&gt;auditLog()</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">Audited: ... | Student document was audited.</td>
+                <td class="fill">Audited: ... | Student document was audited.</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>ใช้ทั้งสอง Trait โดยไม่ระบุ insteadof/alias</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">Fatal error: Trait method timestamp has not been applied...</td>
+                <td class="fill">Fatal error: Trait method timestamp has not been applied...</td>
+                <td class="fill">ผ่าน</td>
             </tr>
         </tbody>
     </table>
@@ -496,20 +501,21 @@ final class Document
 
     <div class="q">
         <p>1) Trait Composition แตกต่างจาก Inheritance อย่างไร และควรเลือกใช้ Trait เมื่อใด <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">Trait Composition คือการนำชุดพฤติกรรมย่อย (Traits) มาผสมรวมเข้ากับคลาสเพื่อเพิ่มความสามารถ โดยไม่ต้องผูกติดกับลำดับชั้น</div>
+        <div class="line">Inheritance (การสืบทอด) คือการสร้างความสัมพันธ์แบบแม่-ลูก (Is-a) ซึ่งคลาสลูกจะได้โค้ดทั้งหมดจากคลาสแม่</div>
+        <div class="line">การใช้ Trait ยืดหยุ่นกว่า ลดปัญหาโค้ดพัวพัน และหลีกเลี่ยงการสืบทอดหลายชั้นที่ซับซ้อน</div>
     </div>
 
     <div class="q">
         <p>2) ตัวอย่างนี้แสดงหลัก DRY อย่างไร จงอธิบาย <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">คลาสเอกสารไม่จำเป็นต้องเขียนลอจิกคำสั่งจัดการวันเวลา date('c') ประทับไว้ในโค้ดของตัวเองซ้ำ ๆ หลายรอบ</div>
+        <div class="line">ทุกอย่างถูกจัดระเบียบรวมศูนย์อยู่ในหน่วยสแตมป์เล็ก ๆ ทำให้ลดการทำโค้ดซ้ำซ้อนลงไปได้อย่างสมบูรณ์</div>
     </div>
 
     <div class="q">
         <p>3) หากในอนาคตเพิ่ม Trait SoftDeletable เข้ามาอีก นักศึกษาต้องระวังเรื่องใดเพื่อไม่ให้เกิด conflict ใหม่ <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line"> ต้องเข้าไปตรวจสอบอย่างละเอียดว่าภายในตัวคลาสเปิดใหม่ตัวนี้ มีการประกาศระบุเมธอดที่ใช้ชื่อว่า timestamp()</div>
+        <div class="line">ที่ซ้ำพ้องกับของเดิมที่มีอยู่แล้วหรือไม่ หากตรวจพบชื่อซ้ำ จะต้องรีบเตรียมเขียนสคริปต์ลอจิก insteadof หรือสร้าง as รอรับมือแก้ไขไว้ล่วงหน้าทันที</div>
     </div>
 
     <h2>เกณฑ์การให้คะแนน</h2>

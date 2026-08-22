@@ -105,6 +105,7 @@
             height: 2em;
             border-bottom: 1px solid #94a3b8;
             margin-bottom: 0.15rem;
+            color: red;
         }
 
         table {
@@ -194,6 +195,9 @@
             size: A4;
             margin: 14mm;
         }
+        .fill{
+            color: red;
+        }
     </style>
 </head>
 
@@ -208,9 +212,9 @@
     </p>
 
     <div class="meta">
-        <div>ชื่อ-นามสกุล: </div>
-        <div>รหัสนักศึกษา: </div>
-        <div>ชั้นปี/ห้อง: </div>
+        <div>ชื่อ-นามสกุล: น.ส.ปภัสสร แย้มชื่น</div>
+        <div>รหัสนักศึกษา: 674230034</div>
+        <div>ชั้นปี/ห้อง: 67/44</div>
         <div>คะแนน: /50</div>
     </div>
 
@@ -279,36 +283,36 @@ classDiagram
 
     <div class="q">
         <p>1) «interface» PaymentMethod ที่มีเมธอด <code>+pay(amount) : string</code> ทำหน้าที่อะไรในระบบ <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">ทำหน้าที่เป็น Abstraction หรือสัญญาข้อตกลง (Contract) ที่กำหนดพฤติกรรมร่วมกันของทุกช่องทางชำระเงิน ช่วยให้ระบบ</div>
+        <div class="line">สามารถทำงานร่วมกับช่องทางใดก็ได้ที่มีเมธอด pay</div>
     </div>
 
     <div class="q">
         <p>2) CreditCardPayment และ PromptPayPayment ถูกกำกับว่า «Strategy» จงอธิบาย Strategy Pattern ในระบบนี้ <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">คือการแยกอัลกอริทึมหรือวิธีการชำระเงินแต่ละแบบออกจากกันเป็นคลาสเฉพาะตัว</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>3) ลูกศร “Strategy / DIP” จาก PaymentGateway ชี้ไปยัง PaymentMethod หมายความว่าอย่างไร และเหตุใด Gateway จึงห้ามสร้าง new ของช่องทางชำระเงินเองภายใน <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">หมายความว่า PaymentGateway พึ่งพาอาศัย Interface แทนการพึ่งพาคลาสการทำงานจริงตามหลัก DIP</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>4) ป้าย “OCP” บนลูกศรจากทั้งสองคลาสชำระเงินหมายถึงอะไร หากเพิ่มช่องทาง TrueMoney Wallet จะต้องแก้โค้ดส่วนใดบ้าง <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">หมายถึง อฟต์แวร์ควรเปิดสำหรับการขยาย แต่ปิดสำหรับการแก้ไข</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>5) ลูกศร “Validation” ชี้ไปยัง InvalidArgumentException หมายถึงการตรวจสอบใด และอยู่ในเมธอดใด <span class="pts">1 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">หมายถึงการตรวจสอบความถูกต้องของจำนวนเงินชำระ (ต้องมีค่ามากกว่า 0) โดยเงื่อนไขนี้ตรวจสอบอยู่ในเมธอด checkout(float $amount) ของคลาส PaymentGateway</div>
     </div>
 
     <div class="q">
         <p>6) PaymentGateway ทำหน้าที่เป็น GRASP Controller อย่างไร <span class="pts">1 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">รับคำสั่งการชำระเงินจากระบบภายนอก ควบคุมขั้นตอนการตรวจสอบเงื่อนไข (Validation) แล้วกระจายงานต่อให้กับวัตถุที่รับผิดชอบโดยตรง</div>
     </div>
 
     <h2>ส่วนที่ 2: วิเคราะห์โค้ด (10 คะแนน)</h2>
@@ -361,25 +365,25 @@ echo $gateway-&gt;checkout(1500.00);
 
     <div class="q">
         <p>1) บรรทัดใดแสดง Dependency Injection จงอธิบาย <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">public function __construct(private readonly PaymentMethod $method) {}</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>2) ผลลัพธ์ของ <code>$gateway-&gt;checkout(1500.00)</code> ในโค้ดบรรทัดสุดท้ายคืออะไร <span class="pts">3 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">ชำระ 1500.00 บาทด้วย PromptPay</div>
     </div>
 
     <div class="q">
         <p>3) หากเรียก <code>$gateway-&gt;checkout(-100)</code> จะเกิดอะไรขึ้น เพราะเหตุใด <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">ระบบจะหยุดทำงานและพ่นข้อผิดพลาด (Throw Exception) ประเภท InvalidArgumentException </div>
+        <div class="line">พร้อมข้อความอธิบายว่า "Amount must be positive."</div>
     </div>
 
     <div class="q">
         <p>4) หากภายในเมธอด checkout มีโค้ด <code>new CreditCardPayment()</code> โดยตรง จะผิดหลักการใด และส่งผลเสียอย่างไร <span class="pts">3 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">ผิดหลักการ Dependency Inversion Principle (DIP) และ Open/Closed Principle (OCP) ผลเสียทำให้ PaymentGateway</div>
+        <div class="line">ผูกติดอยู่กับบัตรเครดิตช่องทางเดียวตลอดไป</div>
     </div>
 
     <h2>ส่วนที่ 3: เติมโค้ดในช่องว่าง (12 คะแนน)</h2>
@@ -437,21 +441,21 @@ final class PaymentGateway
         <tbody>
             <tr>
                 <td>(1)</td>
-                <td class="fill"></td>
+                <td class="fill">pay</td>
                 <td>(4)</td>
-                <td class="fill"></td>
+                <td class="fill">private readonly</td>
             </tr>
             <tr>
                 <td>(2)</td>
-                <td class="fill"></td>
+                <td class="fill">implements</td>
                 <td>(5)</td>
-                <td class="fill"></td>
+                <td class="fill">$amount <= 0.0</td>
             </tr>
             <tr>
                 <td>(3)</td>
-                <td class="fill"></td>
+                <td class="fill">sprintf</td>
                 <td>(6)</td>
-                <td class="fill"></td>
+                <td class="fill">method</td>
             </tr>
         </tbody>
     </table>
@@ -472,39 +476,39 @@ final class PaymentGateway
         <tbody>
             <tr>
                 <td>new PaymentGateway(new PromptPayPayment()) แล้ว checkout(1500)</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">ชำระ 1500 บาทด้วย PromptPay</td>
+                <td class="fill">ชำระ 1500.00 บาทด้วย PromptPay</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>new PaymentGateway(new CreditCardPayment('1234')) แล้ว checkout(250.50)</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">ชำระเงิน 250.50 ด้วยบัตรเครดิต</td>
+                <td class="fill">ชำระ 250.50 บาทด้วยบัตรเครดิต ****1234</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>checkout(0)</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">เกิดข้อพลาด</td>
+                <td class="fill">InvalidArgumentException: Amount must be positive.</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>checkout(-100)</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">เกิดข้อพลาด</td>
+                <td class="fill">InvalidArgumentException: Amount must be positive.</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>สลับเป็น new PaymentGateway(new CreditCardPayment()) แล้ว checkout(99)</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">ชำระเงิน 99 บาท ด้วยบัตรเครดิต</td>
+                <td class="fill">ชำระ 99.00 บาทด้วยบัตรเครดิต ****0000</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>เพิ่มคลาส TrueMoneyPayment implements PaymentMethod แล้วใช้กับ Gateway เดิม</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">ชำระ [จำนวนเงิน] บาทด้วย TrueMoney</td>
+                <td class="fill">ชำระ 500.00 บาทด้วย TrueMoney</td>
+                <td class="fill">ผ่าน</td>
             </tr>
         </tbody>
     </table>
@@ -513,20 +517,20 @@ final class PaymentGateway
 
     <div class="q">
         <p>1) ระบบนี้แสดง Protected Variations อย่างไร จุดที่เปลี่ยนแปลงบ่อยคืออะไร และถูกปกป้องด้วยกลไกใด <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">ประเภทหรือช่องทางการชำระเงินใหม่ ๆ</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>2) การพึ่งพา Abstraction (PaymentMethod) แทน Concrete Class ดีกว่าอย่างไรในแง่การทดสอบและบำรุงรักษา <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">ด้านการทดสอบ สามารถสร้างวัตถุจำลอง (Mock Object) ขึ้นมาทดสอบการทำงานของ Gateway ได้ทันที</div>
+        <div class="line">ด้านการบำรุงรักษา เมื่อมีการเพิ่มหรือแก้ไขลอจิกภายในช่องทางการจ่ายเงินใด ๆ จะไม่ทำให้ระบบเดิมส่วนอื่นพังหรือทำงานผิดพลาด</div>
     </div>
 
     <div class="q">
         <p>3) หากมหาวิทยาลัยเพิ่มนโยบาย “ผ่อนชำระค่าเทอม 3 งวด” นักศึกษาจะออกแบบส่วนเพิ่มเติมอย่างไร โดยไม่ต้องแก้ PaymentGateway <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">ทำการสร้างคลาสใหม่ขึ้นมา เช่น InstallmentThreeMonthsPayment implements PaymentMethod แล้วเขียนลอจิกการ</div>
+        <div class="line">คำนวณและตัดยอดเงินแบ่งจ่ายภายในเมธอด pay()</div>
     </div>
 
     <h2>เกณฑ์การให้คะแนน</h2>

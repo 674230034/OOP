@@ -105,6 +105,7 @@
             height: 2em;
             border-bottom: 1px solid #94a3b8;
             margin-bottom: 0.15rem;
+            color: red;
         }
 
         table {
@@ -194,6 +195,9 @@
             size: A4;
             margin: 14mm;
         }
+        .fill{
+            color: red;
+        }
     </style>
 </head>
 
@@ -208,9 +212,9 @@
     </p>
 
     <div class="meta">
-        <div>ชื่อ-นามสกุล: </div>
-        <div>รหัสนักศึกษา: </div>
-        <div>ชั้นปี/ห้อง: </div>
+        <div>ชื่อ-นามสกุล: น.ส.ปภัสสร แย้มชื่น</div>
+        <div>รหัสนักศึกษา: 674230034</div>
+        <div>ชั้นปี/ห้อง: 67/44</div>
         <div>คะแนน: /50</div>
     </div>
 
@@ -273,35 +277,35 @@ classDiagram
 
     <div class="q">
         <p>1) Stereotype «Invariant» ที่กำกับคลาส BankAccount สื่อความหมายว่าอย่างไร <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">หมายถึงกฎเกณฑ์หรือเงื่อนไขที่ต้องเป็นจริงเสมอ</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>2) สัญลักษณ์ <strong>+</strong> และ <strong>-</strong> หน้าสมาชิกของคลาส หมายถึงอะไร <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">สัญลักษณ์ + หมายถึง Public และ สัญลักษณ์ - หมายถึง Private</div>
     </div>
 
     <div class="q">
         <p>3) property <code>balance</code> อ่านได้จากภายนอกแต่แก้ไขโดยตรงไม่ได้ ใน PHP 8.4 ใช้กลไกใด และเหตุใดจึงออกแบบเช่นนั้น <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">ใช้กลไก Asymmetric Visibility (public private(set)) ออกแบบเพื่อทำ Encapsulation ให้สมบูรณ์ป้องกันไม่ให้โค้ดภายนอกแอบ</div>
+        <div class="line">แก้ไขยอดเงินโดยตรง</div>
     </div>
 
     <div class="q">
         <p>4) จงระบุ Invariant ของคลาส BankAccount มา 2 ข้อ <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">1. ยอดคงเหลือต้องไม่ต่ำกว่าศูนย์ 2. จำนวนเงินธุรกรรมต้องมากกว่าศูนย์</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>5) ลูกศร “Domain Rule” และ “Validation” ชี้ไปยัง Exception คนละคลาส หมายถึงความแตกต่างอย่างไร <span class="pts">1 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">Validation คือการตรวจสอบโครงสร้างข้อมูลเบื้องต้น Domain Rule คือการตรวจสอบกฎทางธุรกิจ</div>
     </div>
 
     <div class="q">
         <p>6) เพราะเหตุใด InsufficientFunds จึงสืบทอด RuntimeException และการมี Domain Exception ดีกว่าใช้ Exception ทั่วไปอย่างไร <span class="pts">1 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">สืบทอดเพราะเป็นข้อผิดพลาดที่เกิดขึ้นขณะรันโปรแกรมขึ้นอยู่กับสถานะของระบบในเวลานั้น ๆ ดีกว่าเพราะมีการสื่อสารชัดเจน</div>
     </div>
 
     <h2>ส่วนที่ 2: วิเคราะห์โค้ด (10 คะแนน)</h2>
@@ -353,24 +357,24 @@ final class BankAccount
 
     <div class="q">
         <p>1) โค้ดส่วนใดป้องกันการฝากหรือถอนจำนวนติดลบและศูนย์ <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">ฟังก์ชันฟังก์ชัน assertPositive(float $amount)เงื่อนไข if ($amount <= 0.0) จะโยน InvalidArgumentException</div>
     </div>
 
     <div class="q">
         <p>2) เมื่อเรียก <code>deposit(300)</code> แล้วเรียก <code>withdraw(120)</code> ค่า balance จะเป็นเท่าใด จงแสดงวิธีทำ <span class="pts">3 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">1. $balance = 0.0 2. 0.0 + 300.0 = 300.0 3. 300.0 - 120.0 = 180.0</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>3) หากยอดคงเหลือ 180 แล้วเรียก <code>withdraw(500)</code> จะเกิดอะไรขึ้น เพราะโค้ดบรรทัดใด <span class="pts">3 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">throw new InsufficientFunds('Insufficient balance.');</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>4) หากภายนอกคลาสเขียนว่า <code>$a-&gt;balance = 9999;</code> จะเกิดผลใด เพราะเหตุใด <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">เพราะ $balance ถูกปกป้องด้วย private(set) ห้ามเขียนจากภายนอก</div>
         <div class="line"></div>
     </div>
 
@@ -416,21 +420,21 @@ final class BankAccount
         <tbody>
             <tr>
                 <td>(1)</td>
-                <td class="fill"></td>
+                <td class="fill">private(set)</td>
                 <td>(4)</td>
-                <td class="fill"></td>
+                <td class="fill">InsufficientFunds</td>
             </tr>
             <tr>
                 <td>(2)</td>
-                <td class="fill"></td>
+                <td class="fill">readonly</td>
                 <td>(5)</td>
-                <td class="fill"></td>
+                <td class="fill">withdraw($amount)</td>
             </tr>
             <tr>
                 <td>(3)</td>
-                <td class="fill"></td>
+                <td class="fill">$amount > $this->balance</td>
                 <td>(6)</td>
-                <td class="fill"></td>
+                <td class="fill">deposit($amount)</td>
             </tr>
         </tbody>
     </table>
@@ -451,39 +455,39 @@ final class BankAccount
         <tbody>
             <tr>
                 <td>$a = new BankAccount('STU-680001'); $a-&gt;deposit(300);</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">ยอดเงินในบัญชีเป็น 300</td>
+                <td class="fill">ยอดเงินในบัญชี $a เป็น 300.0</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>$a-&gt;withdraw(120);</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">เงินในบัญชีเหลือ 180</td>
+                <td class="fill">ยอดเงินในบัญชี $a เหลือ 180.0</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>$a-&gt;withdraw(500);</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">เกิด Exception: InsufficientFunds: Insufficient balance.</td>
+                <td class="fill">เกิด Exception: InsufficientFunds: Insufficient balance.</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>$a-&gt;deposit(-50);</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">เกิด Exception: InvalidArgumentException: Amount must be positive.</td>
+                <td class="fill">เกิด Exception: InvalidArgumentException: Amount must be positive.</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>$b = new BankAccount('STU-680002'); $a-&gt;transferTo($b, 100);</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">ยอดเงิน $a = 80 ยอดเงิน $b = 100</td>
+                <td class="fill">ยอดเงิน $a เหลือ 80.0 ยอดเงิน $b เป็น 100.0</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>$a-&gt;balance = 9999; (ภายนอกคลาส)</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">เกิดข้อผิดพลาด</td>
+                <td class="fill">Error: Cannot modify private(set) property</td>
+                <td class="fill">ผ่าน</td>
             </tr>
         </tbody>
     </table>
@@ -492,19 +496,19 @@ final class BankAccount
 
     <div class="q">
         <p>1) คลาส BankAccount แสดงถึง Single Responsibility Principle อย่างไร <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">คลาสมีหน้าที่เดียวคือจัดการสถานะและพฤติกรรมของบัญชีตนเองไม่ยุ่งเกี่ยวกับการแสดงผล</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>2) หลัก “Tell Don't Ask” หมายความว่าอย่างไร และเมธอด transferTo สะท้อนหลักการนี้อย่างไร <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">หมายถึงการสั่งวัตถุให้ทำงานแทนการดึงข้อมูลมาคำนวณเองข้างนอก ไม่มีการดึงค่ายอดเงินมาตรวจสอบนอกคลาส</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>3) เหตุใดจึงควรสร้าง Domain Exception อย่าง InsufficientFunds แทนการใช้ Exception เดียวทุกกรณี <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">ช่วยให้โค้ดแสดงเจตนาทางธุรกิจอย่างตรงไปตรงมา ระบบสามารถประมวลผลได้ถูกต้อง</div>
         <div class="line"></div>
     </div>
 

@@ -105,6 +105,7 @@
             height: 2em;
             border-bottom: 1px solid #94a3b8;
             margin-bottom: 0.15rem;
+            color: red;
         }
 
         table {
@@ -203,6 +204,9 @@
             size: A4;
             margin: 14mm;
         }
+        .fill{
+            color: red;
+        }
     </style>
 </head>
 
@@ -217,9 +221,9 @@
     </p>
 
     <div class="meta">
-        <div>ชื่อ-นามสกุล: </div>
-        <div>รหัสนักศึกษา: </div>
-        <div>ชั้นปี/ห้อง: </div>
+        <div>ชื่อ-นามสกุล: น.ส.ปภัสสร แย้มชื่น</div>
+        <div>รหัสนักศึกษา: 674230034</div>
+        <div>ชั้นปี/ห้อง: 67/44</div>
         <div>คะแนน: /50</div>
     </div>
 
@@ -323,36 +327,36 @@ classDiagram
 
     <div class="q">
         <p>1) RegisterUserService ถูกกำกับว่า «Controller» (Use Case Controller) หมายความว่าอย่างไร <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">หมายความว่าเป็นออบเจกต์เลเยอร์บริการที่มีหน้าที่คอยควบคุม ประสานงาน และคุมลอจิกการทำงานของเคสกิจกรรมทางธุรกิจเรื่องนั้น ๆ โดยตรง</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>2) ลูกศร “DIP / Injection” จาก RegisterUserService ไปยัง UserRepository และ PasswordHasher หมายถึงอะไร และเหตุใด Service จึงไม่ควรสร้าง Repository เอง <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">หมายความว่า Service เรียกใช้และรับเอาออบเจกต์แอบสแตรกชันเข้ามาทำงานผ่านทางช่องประตู Constructor</div>
+        <div class="line">เหตุผล เพื่อไม่ให้เกิดภาวะ Tight Coupling ผูกมัดแน่นจนเกินไป ช่วยให้สามารถสลับเปลี่ยนกลไกการบันทึกข้อมูลหรือแฮชรหัสผ่านได้โดยไม่ต้องรื้อรหัสระบบภายใน</div>
     </div>
 
     <div class="q">
         <p>3) Email «ValueObject» มีบทบาทอย่างไรใน Use Case นี้ (ป้าย Validation / VO) <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">ทำหน้าที่คอยเป็นด่านหน้าปกป้องช่วยกลั่นกรอง สกัด ตรวจสอบความถูกต้องของสายอักขระอีเมลนักศึกษาที่กรอกส่งเข้ามา เพื่อให้มั่นใจได้ว่าข้อมูลมีรูปแบบที่ถูกต้อง</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>4) ลูกศร “Guard” ชี้ไปยัง InvalidArgumentException หมายถึงการป้องกันกรณีใดบ้าง <span class="pts">1 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">1. รูปแบบโครงสร้างอีเมลผิดเพี้ยน 2. ตั้งรหัสผ่านสั้นเกินไป (ต่ำกว่า 12 ตัวอักษร) 3. รหัสนักศึกษา (id) ซ้ำกับผู้ใช้งานคนอื่นที่มีอยู่ในฐานระบบแล้ว</div>
     </div>
 
     <div class="q">
         <p>5) ArgonPasswordHasher ถูกกำกับว่า «Strategy» และลูกศรไปยัง PasswordHasher มีป้าย “OCP” หมายความว่าอย่างไร <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">หมายถึงคลาสนี้เป็นหนึ่งในแผนกลยุทธ์การแฮชรหัสผ่าน</div>
+        <div class="line">ความหมายของป้าย OCP หากอนาคตมีอัลกอริทึมแฮชตัวใหม่ที่ดีกว่าปรากฏขึ้น เราสามารถสร้างคลาสใหม่มาต่อเชื่อมใช้งานได้ทันทีโดยไม่ต้องแก้ไขลอจิกด้านในของตัว RegisterUserService</div>
     </div>
 
     <div class="q">
         <p>6) ป้าย “Creator” บนลูกศรจาก RegisterUserService ไปยัง User หมายถึงอะไรตามหลัก GRASP <span class="pts">1 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">มายความว่าคลาส RegisterUserService เป็นผู้มีความเหมาะสมและได้รับสิทธิ์ความรับผิดชอบในการสั่งสร้างประกอบร่างวัตถุ (User) ชิ้นใหม่ขึ้นมาในระบบ</div>
     </div>
 
     <h2>ส่วนที่ 2: วิเคราะห์โค้ด (10 คะแนน)</h2>
@@ -451,26 +455,26 @@ var_dump(password_verify('StudentPass123!', $user-&gt;passwordHash));
 
     <div class="q">
         <p>1) โค้ดส่วนใดแสดงให้เห็นว่าระบบไม่เก็บรหัสผ่านแบบ Plain Text จงอธิบาย <span class="pts">3 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">$passwordHash = $this->hasher->hash($password); และ password_hash($plainText, PASSWORD_DEFAULT); ด้านใน</div>
+        <div class="line">ระบบจะนำรหัสผ่านตัวอักษรธรรมดาไปแปลงรูปผ่านกลไกความปลอดภัย Argon2/Bcrypt จนกลายเป็นข้อความรหัสลับที่ซับซ้อนก่อนนำไปจัดเก็บลงสู่ฐานข้อมูลจริง</div>
     </div>
 
     <div class="q">
         <p>2) การเรียก <code>register(680002, 'invalid-email', 'StudentPass123!')</code> จะเกิดอะไรขึ้น และข้อมูลจะถูกบันทึกหรือไม่ <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">ระบบจะยุติงานทันทีและทำการ Throw InvalidArgumentException: Invalid email address.</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>3) การเรียก <code>register(680003, 'valid@example.ac.th', 'short')</code> จะเกิดอะไรขึ้น เหตุใดจึงกำหนดความยาวขั้นต่ำ 12 ตัวอักษร <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">เกิดข้อผิดพลาดพ่นแอร์เรอร์แจ้งเตือนเรื่อง Password must be at least 12 characters.</div>
+        <div class="line">ตามหลักการ Security by Design เพื่อช่วยป้องกันภัยคุกคามจากการเดาสุ่มรหัสผ่านด้วยคอมพิวเตอร์ความเร็วสูง ยิ่งยาวสิทธิ์ความปลอดภัยยิ่งเพิ่มขึ้น</div>
     </div>
 
     <div class="q">
         <p>4) การที่ Service รับ UserRepository เป็น Interface ช่วยให้การเขียน Unit Test ง่ายขึ้นอย่างไร <span class="pts">3 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">1. ช่วยให้ทดสอบเร็วขึ้นไม่ต้องเชื่อมต่อหรือเปิดเซิร์ฟเวอร์ฐานข้อมูลจริง 2. ปลอดภัยป้องกันข้อมูลขยะไปปนเปื้อนในระบบจริง</div>
+        <div class="line">3. อิสระจำลองสถานการณ์และพฤติกรรมต่างๆ ของข้อมูลเพื่อทดสอบโค้ดฝั่ง Service ได้ทันที</div>
     </div>
 
     <h2>ส่วนที่ 3: เติมโค้ดในช่องว่าง (12 คะแนน)</h2>
@@ -523,21 +527,21 @@ final class RegisterUserService
         <tbody>
             <tr>
                 <td>(1)</td>
-                <td class="fill"></td>
+                <td class="fill">PASSWORD_DEFAULT</td>
                 <td>(4)</td>
-                <td class="fill"></td>
+                <td class="fill">strlen</td>
             </tr>
             <tr>
                 <td>(2)</td>
-                <td class="fill"></td>
+                <td class="fill">UserRepository</td>
                 <td>(5)</td>
-                <td class="fill"></td>
+                <td class="fill">hash</td>
             </tr>
             <tr>
                 <td>(3)</td>
-                <td class="fill"></td>
+                <td class="fill">fromString</td>
                 <td>(6)</td>
-                <td class="fill"></td>
+                <td class="fill">save</td>
             </tr>
         </tbody>
     </table>
@@ -558,39 +562,39 @@ final class RegisterUserService
         <tbody>
             <tr>
                 <td>register(680001, 'student@example.ac.th', 'StudentPass123!')</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">คืนค่าเป็นออบเจกต์ User สมัครผ่านสมบูรณ์</td>
+                <td class="fill">คืนค่าเป็นออบเจกต์ User สมัครผ่านสมบูรณ์</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>register(680002, 'invalid-email', 'StudentPass123!')</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">InvalidArgumentException: Invalid email address.</td>
+                <td class="fill">InvalidArgumentException: Invalid email address.</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>register(680003, 'valid@example.ac.th', 'short')</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">Password must be at least 12 characters.</td>
+                <td class="fill">Password must be at least 12 characters.</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>register(680001, 'another@example.ac.th', 'StudentPass123!') (id ซ้ำ)</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">InvalidArgumentException: Student ID already exists.</td>
+                <td class="fill">InvalidArgumentException: Student ID already exists.</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>ตรวจสอบ $user-&gt;passwordHash !== 'StudentPass123!' และ password_verify(...)</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">bool(true)</td>
+                <td class="fill">bool(true)</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>count($repo-&gt;all()) หลังสมัครสำเร็จ 1 คน</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">int(1)</td>
+                <td class="fill">int(1)</td>
+                <td class="fill">ผ่าน</td>
             </tr>
         </tbody>
     </table>
@@ -599,20 +603,21 @@ final class RegisterUserService
 
     <div class="q">
         <p>1) Use Case นี้สะท้อนหลัก Security by Design อย่างไร จงยกตัวอย่างอย่างน้อย 2 จุด <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">1. มีมาตรการบังคับใช้กลไกเข้ารหัสความปลอดภัยระดับสากล</div>
+        <div class="line">2. มีการตั้งการ์ดสกัดกั้นตรวจสอบความแข็งแกร่งของรหัสผ่านขั้นต่ำ 12 ตัวอักษรเพื่อรับมือกับภัยคุกคามไซเบอร์ตั้งแต่ต้นทาง</div>
     </div>
 
     <div class="q">
         <p>2) จงอธิบายแนวทางเขียน Unit Test โดยใช้ FakeUserRepository ที่ implements UserRepository เดียวกัน <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">1. สร้างคลาสจำลองที่ใช้ข้อตกลง (implements) เดียวกับ UserRepository</div>
+        <div class="line">2. เปลี่ยนจากการบันทึกลงฐานข้อมูลจริงมาเก็บข้อมูลไว้ในแอปพลิเคชันอาร์เรย์ (Array) แทน</div>
+        <div class="line">3. สร้างวัตถุจำลองนั้น แล้วส่งเข้าไปในคลาส (Inject via Constructor) ของ RegisterUserService เพื่อกดทดสอบระบบสมัครเรียนได้ทันที</div>
     </div>
 
     <div class="q">
         <p>3) เหตุใดในระบบจริงจึงควรแยก passwordHash ไปไว้ใน Credential Entity แทนการเก็บใน User โดยตรง <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">เพื่อแยกความรับผิดชอบและรักษาความปลอดภัย โดยให้ User เก็บเฉพาะข้อมูลทั่วไปที่แสดงผลได้</div>
+        <div class="line">และแยกข้อมูลลับไปไว้ที่ Credential เพื่อป้องกันอุบัติเหตุข้อมูลความลับรั่วไหลออกสู่ภายนอก</div>
     </div>
 
     <h2>เกณฑ์การให้คะแนน</h2>

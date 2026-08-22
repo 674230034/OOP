@@ -105,6 +105,7 @@
             height: 2em;
             border-bottom: 1px solid #94a3b8;
             margin-bottom: 0.15rem;
+            color: red;
         }
 
         table {
@@ -194,6 +195,9 @@
             size: A4;
             margin: 14mm;
         }
+        .fill{
+            color: red;
+        }
     </style>
 </head>
 
@@ -208,9 +212,9 @@
     </p>
 
     <div class="meta">
-        <div>ชื่อ-นามสกุล: </div>
-        <div>รหัสนักศึกษา: </div>
-        <div>ชั้นปี/ห้อง: </div>
+        <div>ชื่อ-นามสกุล: น.ส.ปภัสสร แย้มชื่น</div>
+        <div>รหัสนักศึกษา: 674230034</div>
+        <div>ชั้นปี/ห้อง: 67/44</div>
         <div>คะแนน: /50</div>
     </div>
 
@@ -286,36 +290,37 @@ classDiagram
 
     <div class="q">
         <p>1) สัญลักษณ์สี่เหลี่ยมทึบ (filled diamond) ด้าน Order ของความสัมพันธ์กับ OrderItem หมายถึงอะไร แตกต่างจาก Aggregation อย่างไร <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">หมายถึง การประกอบกันอย่างแน่นหนา Aggregation ที่วัตถุภายในสามารถแยกย้ายกันไปมีชีวิตอยู่ต่อได้</div>
+        <div class="line">OrderItem จะไม่มีสิทธิ์มีชีวิตอยู่ได้เองอย่างอิสระหากคลาสหลัก (Order) ถูกลบทำลายทิ้งไป</div>
     </div>
 
     <div class="q">
         <p>2) OrderItem ถูกกำกับว่า «InformationExpert» หมายความว่าอย่างไร และสอดคล้องกับเมธอดใดในคลาส <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">หมายถึงคลาสนี้เป็นผู้กุมข้อมูลและสารสนเทศทั้งหมดที่จำเป็นในการคำนวณหน้าที่นั้น ๆ ไว้กับตัว</div>
+        <div class="line">สอดคล้องกับ เมธอด total() ของ OrderItem</div>
     </div>
 
     <div class="q">
         <p>3) ลูกศร “DIP / Strategy” จาก Order ชี้ไปยัง DiscountPolicy สื่อความหมายว่าอย่างไร <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">สื่อความหมายว่า Order เรียกใช้งานนโยบายส่วนลดผ่านสัญญาแอบสแตรกชัน (DiscountPolicy Interface)</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>4) ป้าย “OCP” บนลูกศรจาก PercentageDiscount ไปยัง DiscountPolicy หมายถึงอะไร หากเพิ่มส่วนลดแบบจำนวนเงินคงที่ (FixedDiscount) ต้องแก้โค้ดส่วนใดบ้าง <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">OCP หมายถึง Open/Closed Principle</div>
+        <div class="line">ให้เขียนคลาสใหม่ขึ้นมาในชื่อ FixedDiscount implements DiscountPolicy โดยไม่ต้องกลับไปรื้อหรือแก้ไขเพิ่มโค้ดใด ๆ ในคลาส Order</div>
     </div>
 
     <div class="q">
         <p>5) ลูกศร “Validation” จาก OrderItem และ PercentageDiscount ชี้ไปยัง InvalidArgumentException แต่ละคลาสตรวจสอบเงื่อนไขใดบ้าง <span class="pts">1 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">OrderItem ตรวจสอบว่า: ชื่อสินค้าห้ามเป็นค่าว่าง, จำนวนชิ้นต้อง \(>0\), และราคาห้ามติดลบ</div>
+        <div class="line">PercentageDiscount ตรวจสอบว่า: ค่าเปอร์เซ็นต์ส่วนลดต้องอยู่ระหว่าง 0.0 ถึง 100.0 เท่านั้น</div>
     </div>
 
     <div class="q">
         <p>6) เมธอด <code>subtotal()</code> และ <code>total()</code> ของ Order แตกต่างกันอย่างไร <span class="pts">1 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">subtotal() คือยอดรวมราคาสินค้าทุกรายการก่อนหักส่วนลด ส่วน total() คือยอดรวมสุทธิที่นำค่า subtotal ไปคำนวณหักลบกับมูลค่าส่วนลด</div>
     </div>
 
     <h2>ส่วนที่ 2: วิเคราะห์โค้ด (10 คะแนน)</h2>
@@ -404,25 +409,26 @@ echo sprintf('ยอดสุทธิร้านสวัสดิการน
 
     <div class="q">
         <p>1) โค้ดบรรทัดใดแสดงให้เห็นว่า Order “ไม่รู้รายละเอียด” ของนโยบายส่วนลด จงอธิบาย <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">$subtotal - $this->discountPolicy->discount($subtotal)</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>2) จงคำนวณยอดสุทธิของคำสั่งซื้อในโค้ด (ข้าวผัด 2 × 60, น้ำดื่ม 2 × 10, ส่วนลด 10%) พร้อมแสดงวิธีทำ <span class="pts">3 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">รวมย่อย ข้าวผัด 2 * 60 = 120 น้ำดื่ม 2 * 10 ยอดรวม 140 บาท</div>
+        <div class="line">ยอดส่วนลด 140 * (10/100) = 14 บาท</div>
+        <div class="line">คำนวณยอดรวมสุทธิ 140 - 14 = 126 บาท</div>
     </div>
 
     <div class="q">
         <p>3) การสร้าง <code>new OrderItem('', 1, 50)</code> และ <code>new OrderItem('ปากกา', 0, 20)</code> จะเกิดอะไรขึ้นแต่ละกรณี เพราะเหตุใด <span class="pts">3 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">จะเกิดปัญหาหยุดทำงานและเกิดการ Throw InvalidArgumentException ขึ้นทั้งสองกรณี</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>4) เหตุใด OrderItem จึงเป็น <code>final readonly</code> class การออกแบบนี้ดีต่อระบบคำสั่งซื้ออย่างไร <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">เพื่อบังคับให้ออบเจกต์รายการสินค้าคงสภาพเดิมไม่สามารถแก้ไขค่าได้หลังสร้าง</div>
         <div class="line"></div>
     </div>
 
@@ -492,21 +498,21 @@ final class Order
         <tbody>
             <tr>
                 <td>(1)</td>
-                <td class="fill"></td>
+                <td class="fill"><= </td>
                 <td>(4)</td>
-                <td class="fill"></td>
+                <td class="fill">100.0</td>
             </tr>
             <tr>
                 <td>(2)</td>
-                <td class="fill"></td>
+                <td class="fill">*</td>
                 <td>(5)</td>
-                <td class="fill"></td>
+                <td class="fill">DiscountPolicy</td>
             </tr>
             <tr>
                 <td>(3)</td>
-                <td class="fill"></td>
+                <td class="fill">discount</td>
                 <td>(6)</td>
-                <td class="fill"></td>
+                <td class="fill">discount</td>
             </tr>
         </tbody>
     </table>
@@ -527,39 +533,39 @@ final class Order
         <tbody>
             <tr>
                 <td>(new OrderItem('ข้าวผัด', 2, 60))-&gt;total()</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">float(120)</td>
+                <td class="fill">float(120)</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>new OrderItem('ปากกา', 0, 20)</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">InvalidArgumentException: Invalid order item.</td>
+                <td class="fill">InvalidArgumentException: Invalid order item.</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>new PercentageDiscount(150)</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">InvalidArgumentException: Percent must be between 0 and 100.</td>
+                <td class="fill">InvalidArgumentException: Percent must be between 0 and 100.</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>Order [ข้าวผัด 2×60, น้ำดื่ม 2×10] + PercentageDiscount(10): เรียก subtotal() และ total()</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">ยอดรวมย่อย: 140.00 ยอดสุทธิ: 126.00</td>
+                <td class="fill">ยอดรวมย่อย: 140.00 ยอดสุทธิ: 126.00</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>Order เดิมแต่เปลี่ยนเป็น PercentageDiscount(0)</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">ยอดรวมย่อย: 140.00 ยอดสุทธิ: 140.00</td>
+                <td class="fill">ยอดรวมย่อย: 140.00 ยอดสุทธิ: 140.00</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>new Order([], new PercentageDiscount(10)) แล้ว total()</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">float(0)</td>
+                <td class="fill">float(0)</td>
+                <td class="fill">ผ่าน</td>
             </tr>
         </tbody>
     </table>
@@ -568,20 +574,20 @@ final class Order
 
     <div class="q">
         <p>1) การใช้ Composition แทน Inheritance ในการประกอบ Order จาก OrderItem มีข้อดีอย่างไร จงยกตัวอย่างสถานการณ์ที่ Inheritance จะทำให้การออกแบบแย่ลง <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">เพิ่มความยืดหยุ่น โครงสร้างระบบสลับเปลี่ยนไทป์ข้อมูลได้ง่ายขึ้น</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>2) ระบบนี้สอดคล้องกับ OCP อย่างไร หากร้านสวัสดิการเพิ่มโปรโมชัน “ซื้อครบ 300 บาท ลดเพิ่ม 20 บาท” นักศึกษาจะออกแบบคลาสใหม่อย่างไร <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">ระบบเปิดโอกาสให้เพิ่มพฤติกรรมการลดราคาใหม่ ๆ ได้อย่างอิสระโดยไม่ต้องแก้ไขระบบเดิม</div>
+        <div class="line">สร้างคลาสชื่อ FlatRateThresholdDiscount implements DiscountPolicy ภายในเมธอดเขียนตรวจสอบเงื่อนไข if ($subtotal >= 300) { return 20.0; }</div>
     </div>
 
     <div class="q">
         <p>3) เหตุใดการให้ OrderItem รับผิดชอบเมธอด total() จึงถูกต้องตามหลัก Information Expert <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">เพราะเป็นแนวทางปฏิบัติที่ส่งงานให้กับคลาสที่มีความพร้อมและเป็นผู้ถือครองข้อมูลชิ้นนั้นอยู่แล้ว คลาส OrderItem </div>
+        <div class="line">ทราบตัวเลขราคากับปริมาณสินค้าชัดเจน</div>
     </div>
 
     <h2>เกณฑ์การให้คะแนน</h2>

@@ -105,6 +105,7 @@
             height: 2em;
             border-bottom: 1px solid #94a3b8;
             margin-bottom: 0.15rem;
+            color: red;
         }
 
         table {
@@ -194,6 +195,9 @@
             size: A4;
             margin: 14mm;
         }
+        .fill{
+            color: red;
+        }
     </style>
 </head>
 
@@ -208,9 +212,9 @@
     </p>
 
     <div class="meta">
-        <div>ชื่อ-นามสกุล: </div>
-        <div>รหัสนักศึกษา: </div>
-        <div>ชั้นปี/ห้อง: </div>
+        <div>ชื่อ-นามสกุล: น.ส.ปภัสสร แย้มชื่น</div>
+        <div>รหัสนักศึกษา: 674230034</div>
+        <div>ชั้นปี/ห้อง: 67/44</div>
         <div>คะแนน: /50</div>
     </div>
 
@@ -271,36 +275,36 @@ classDiagram
 
     <div class="q">
         <p>1) «interface» UserRepository ทำหน้าที่อะไรในระบบ และเหตุใดต้องแยก “สัญญา” ออกจาก “implementation” <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">ทำหน้าที่เป็นสัญญาข้อตกลง (Contract) หรืออินเทอร์เฟซส่วนกลางที่กำหนดเมธอดในการเข้าถึงและจัดการข้อมูลผู้ใช้</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>2) ลูกศร “Protected Variations” จาก InMemoryUserRepository ชี้ไปยัง UserRepository หมายถึงอะไร <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">หมายความว่าระบบใช้ UserRepository เป็นจุดเชื่อมต่อที่เสถียร เพื่อปกป้องโค้ดส่วนอื่น ๆ จากความเปลี่ยนแปลงที่อาจเกิดขึ้น</div>
+        <div class="line">ภายในคลาสจัดเก็บข้อมูล</div>
     </div>
 
     <div class="q">
         <p>3) ป้าย “Information Hiding” บนลูกศรจาก InMemoryUserRepository ไปยัง User สื่อความหมายว่าอย่างไร <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">สื่อความหมายว่า คลาสจัดเก็บข้อมูลทำหน้าที่ปกปิดกลไกและโครงสร้างข้อมูลภายในของการเก็บออบเจกต์ User</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>4) User ถูกกำกับว่า «Entity» ซึ่งแตกต่างจาก Value Object อย่างไร จงอธิบายพร้อมยกตัวอย่าง <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">Entity มีเอกลักษณ์ประจำตัว (Identity) ที่ระบุตัวตนได้ชัดเจนและไม่เปลี่ยนแปลงตลอดช่วงชีวิต</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>5) เมธอด findById คืนค่าเป็น UserOrNull การคืน null สื่อความหมายว่าอย่างไร <span class="pts">1 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">สื่อความหมายว่า "ไม่พบข้อมูล" หรือไม่มีออบเจกต์ User ที่ตรงกับรหัสไอดี (id) ที่ระบุส่งเข้ามาในระบบ</div>
     </div>
 
     <div class="q">
         <p>6) หากในอนาคตต้องการเปลี่ยนไปเก็บข้อมูลในฐานข้อมูล MySQL โค้ดส่วนใดต้องเปลี่ยนแปลงบ้าง <span class="pts">1 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">สร้างคลาสใหม่ขึ้นมาเพื่อเขียนโค้ดเชื่อมต่อฐานข้อมูลจริง โดยไม่ต้องแก้ไขอินเทอร์เฟซ</div>
     </div>
 
     <h2>ส่วนที่ 2: วิเคราะห์โค้ด (10 คะแนน)</h2>
@@ -360,24 +364,24 @@ echo sprintf('จำนวนนักศึกษาทั้งหมด: %d �
 
     <div class="q">
         <p>1) เหตุใดเมธอด all() จึงใช้ <code>array_values()</code> แทนการคืน <code>$this-&gt;users</code> โดยตรง ป้องกันความเสี่ยงใด <span class="pts">3 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">เพื่อล้างคีย์ที่เป็น id ของอาร์เรย์ตัวเดิมให้เหลือเพียงลิสต์อาร์เรย์ที่เรียงลำดับดัชนีใหม่จาก 0</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>2) การเรียก <code>$repo-&gt;findById(999999)</code> ให้ผลลัพธ์เป็นอะไร และโค้ดบรรทัดใดรับผิดชอบ <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">ให้ผลลัพธ์เป็น null</div>
     </div>
 
     <div class="q">
         <p>3) หาก save ผู้ใช้ที่มี id ซ้ำกับข้อมูลเดิมจะเกิดอะไรขึ้น เพราะเหตุใด <span class="pts">3 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">ข้อมูลผู้ใช้คนใหม่จะเข้าไปเขียนทับ (Overwrite) ข้อมูลเดิมในอาร์เรย์ทันที</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>4) เหตุใด User จึงเป็น <code>final readonly</code> class การออกแบบนี้ดีต่อระบบอย่างไร <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">เพื่อทำให้คลาสนี้เป็นวัตถุที่ไม่สามารถเปลี่ยนแปลงค่าได้หลังการสร้าง และไม่สามารถถูกสืบทอดเพื่อแก้ไขพฤติกรรมได้</div>
         <div class="line"></div>
     </div>
 
@@ -436,21 +440,21 @@ final class InMemoryUserRepository (5)________________ UserRepository
         <tbody>
             <tr>
                 <td>(1)</td>
-                <td class="fill"></td>
+                <td class="fill">readonly</td>
                 <td>(4)</td>
-                <td class="fill"></td>
+                <td class="fill">array_values</td>
             </tr>
             <tr>
                 <td>(2)</td>
-                <td class="fill"></td>
+                <td class="fill">?User</td>
                 <td>(5)</td>
-                <td class="fill"></td>
+                <td class="fill">implements</td>
             </tr>
             <tr>
                 <td>(3)</td>
-                <td class="fill"></td>
+                <td class="fill">??</td>
                 <td>(6)</td>
-                <td class="fill"></td>
+                <td class="fill">$user->id</td>
             </tr>
         </tbody>
     </table>
@@ -471,39 +475,39 @@ final class InMemoryUserRepository (5)________________ UserRepository
         <tbody>
             <tr>
                 <td>save(new User(680001, 'student@example.ac.th')) แล้ว findById(680001)</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">คืนค่าออบเจกต์ User ที่มีอีเมล 'student@example.ac.th'</td>
+                <td class="fill">คืนค่าออบเจกต์ User ที่มีอีเมล 'student@example.ac.th'</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>findById(999999)</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">null</td>
+                <td class="fill">null</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>save เพิ่มอีก 1 คน แล้ว all()</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">คืนอาร์เรย์ที่มีข้อมูล User รวมทั้งหมด 2 คน</td>
+                <td class="fill">คืนอาร์เรย์ที่มีข้อมูล User รวมทั้งหมด 2 คน</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>save(new User(680001, 'new@example.ac.th')) แล้ว findById(680001)</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">คืนค่าออบเจกต์ User</td>
+                <td class="fill">คืนค่าออบเจกต์ User ที่เปลี่ยนอีเมลเป็น 'new@example.ac.th'</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>$list = all(); แล้วเพิ่มสมาชิกใหม่ลงใน $list โดยตรง</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">สมาชิกเพิ่มในตัวแปร $list ทั่วไป</td>
+                <td class="fill">สมาชิกเพิ่มในตัวแปร $list ทั่วไป</td>
+                <td class="fill">ผ่าน</td>
             </tr>
             <tr>
                 <td>count(all()) หลังขั้นตอนก่อนหน้า</td>
-                <td class="fill"></td>
-                <td class="fill"></td>
-                <td class="fill"></td>
+                <td class="fill">ได้จำนวนคงเดิมตามที่เก็บบนคลาส</td>
+                <td class="fill">ได้จำนวนคงเดิมตามที่เก็บบนคลาส</td>
+                <td class="fill">ผ่าน</td>
             </tr>
         </tbody>
     </table>
@@ -512,19 +516,19 @@ final class InMemoryUserRepository (5)________________ UserRepository
 
     <div class="q">
         <p>1) Repository Pattern ช่วยลด coupling ระหว่าง Use Case กับเทคโนโลยีการจัดเก็บข้อมูลอย่างไร <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
-        <div class="line"></div>
+        <div class="line">โดยการทำหน้าที่เป็นเลเยอร์คั่นกลางชิ้นหนึ่ง โค้ดส่วนธุรกิจ สั่งงานเรียกใช้ข้อมูลผ่านอินเทอร์เฟซของ Repository เสมือนว่าเป็น</div>
+        <div class="line">คอลเลกชันอาร์เรย์ธรรมดา</div>
     </div>
 
     <div class="q">
         <p>2) “จุดที่เปลี่ยนแปลง” ในข้อนี้คืออะไร และการออกแบบนี้ปกป้องระบบด้วย Protected Variations อย่างไร <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">กลไกหรือเทคโนโลยีที่ใช้เก็บข้อมูลจริงจากอาศัยหน่วยความจำ In-Memory ย้ายไปใช้ MySQL, PostgreSQL หรือคลาวด์สโตเรจ</div>
         <div class="line"></div>
     </div>
 
     <div class="q">
         <p>3) เมื่อต้องเขียน Unit Test ให้ RegisterUserService Interface UserRepository ช่วยให้การทดสอบง่ายขึ้นอย่างไร <span class="pts">2 คะแนน</span></p>
-        <div class="line"></div>
+        <div class="line">ช่วยให้เราสามารถจำลองสถาปัตยกรรมข้อมูลได้ง่ายมาก โดยไม่ต้องสร้างหรือเปิดเซิร์ฟเวอร์ฐานข้อมูลจริงเพื่อการรันทดสอบ</div>
         <div class="line"></div>
     </div>
 
